@@ -32,4 +32,4 @@ The repository contains an example script using a [COG-UK](https://www.cogconsor
 
 ## Credits
 
-Many thanks to the open-science of [COG-UK](https://www.cogconsortium.uk/), their data sets in [ENA](https://www.ebi.ac.uk/ena/browser/home) were very useful to develop the code. The workflow uses many tools distributed via [bioconda](https://bioconda.github.io/), please see the `Makefile` for all the dependencies and of course, thanks to all the developers.
+Many thanks to the open-science of [COG-UK](https://www.cogconsortium.uk/), their data sets in [ENA](https://www.ebi.ac.uk/ena/browser/home) were very useful to develop the code. The workflow uses many tools distributed via [bioconda](https://bioconda.github.io/), please see the [Makefile](https://github.com/tobiasrausch/covid19/blob/main/Makefile) for all the dependencies and of course, thanks to all the developers.
