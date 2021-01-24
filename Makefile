@@ -19,4 +19,4 @@ all:   	$(TARGETS)
 	export PATH=${PBASE}/conda/bin:${PATH} && samtools --version && bcftools --version && bedtools --version && bgzip --version && tabix --version && trim_galore --version && delly --version && ivar version && touch .check
 
 clean:
-	rm -rf $(TARGETS) $(TARGETS:=.o) bin/
+	rm -rf $(TARGETS) $(TARGETS:=.o) conda/
