@@ -3,6 +3,7 @@
 .conda
 .install
 conda/
+data/
 *~
 
 # python
