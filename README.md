@@ -1,6 +1,6 @@
 # SARS-CoV-2 data analysis
 
-SARS-CoV-2 analysis pipeline for short-read, paired-end illumina sequencing
+SARS-CoV-2 analysis pipeline for short-read, paired-end sequencing.
 
 ## Installation
 
