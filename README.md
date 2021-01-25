@@ -4,7 +4,7 @@ SARS-CoV-2 analysis pipeline for short-read, paired-end sequencing.
 
 ## Installation
 
-A `Makefile` is part of the code that installs all dependencies using bioconda.
+A [Makefile](https://github.com/tobiasrausch/covid19/blob/main/Makefile) is part of the code that installs all dependencies using bioconda.
 
 `make all`
 
