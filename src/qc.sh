@@ -24,3 +24,6 @@ cat ${FASTA} | sed 's/^N*//' | sed 's/N*$//' | tr 'RYSWKMBDHV' 'NNNNNNNNNN' > ${
 # Alignment to the reference (end-gaps free in reference)
 alfred pwalign -q -f h -a ${OUTP}.align.fa.gz ${REF} ${OUTP}.in.fasta
 rm ${OUTP}.in.fasta
+
+# Compute summary QC table
+python ${BASEDIR}/qc.py -p ${OUTP} > ${OUTP}.qc.summary

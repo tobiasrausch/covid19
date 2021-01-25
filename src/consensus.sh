@@ -23,7 +23,7 @@ THREADS=4
 samtools mpileup -A -d 10000 -B -Q 0 --reference ${REF} ${BAM} | ivar variants -r ${REF} -g ${GFF} -m 10 -q 20 -t 0.15 -p ${OUTP}.iVar
 
 # Consensus
-samtools mpileup -aa -A -d 10000 -Q 0 ${BAM} | ivar consensus -t 0.7 -m 10 -n N -p ${OUTP}.cons
+samtools mpileup -aa -A -d 10000 -B -Q 0 ${BAM} | ivar consensus -t 0.7 -m 10 -n N -p ${OUTP}.cons
 
 # Nucleotide composition
 tail -n +2 ${OUTP}.cons.fa | sed 's/\(.\)/\1\n/g' | grep "." | sort | uniq -c > ${OUTP}.cons.comp
