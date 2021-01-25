@@ -28,7 +28,7 @@ There is a run script that performs adapter trimming, host read removal, alignme
 
 The main output files are:
 
-* The adapter-trimmed and host-read filtered FASTQ files are: `ls <unique_sample_id>/<unique_sample_id>.filtered.R_[12].fq.gz`
+* The adapter-trimmed and host-filtered FASTQ files: `ls <unique_sample_id>/<unique_sample_id>.filtered.R_[12].fq.gz`
 
 * The alignment to SARS-CoV-2: `ls <unique_sample_id>/<unique_sample_id>.srt.bam`
 
