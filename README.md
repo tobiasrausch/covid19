@@ -28,15 +28,15 @@ There is a run script that performs adapter trimming, host read removal, alignme
 
 The main output files are:
 
-* The adapter-trimmed and host-filtered FASTQ files: `ls <unique_sample_id>/<unique_sample_id>.filtered.R_[12].fq.gz`
+* The adapter-trimmed and host-filtered FASTQ files: `ls <unique_sample_id>.filtered.R_[12].fq.gz`
 
-* The alignment to SARS-CoV-2: `ls <unique_sample_id>/<unique_sample_id>.srt.bam`
+* The alignment to SARS-CoV-2: `ls <unique_sample_id>.srt.bam`
 
-* The consensus sequence: `ls <unique_sample_id>/<unique_sample_id>.cons.fa`
+* The consensus sequence: `ls <unique_sample_id>.cons.fa`
 
-* The annotated variants: `ls <unique_sample_id>/<unique_sample_id>.variants.tsv`
+* The annotated variants: `ls <unique_sample_id>.variants.tsv`
 
-* The summary QC report: `ls <unique_sample_id>/<unique_sample_id>.qc.summary`
+* The summary QC report: `ls <unique_sample_id>.qc.summary`
 
 
 ## Example
