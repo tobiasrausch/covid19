@@ -24,6 +24,21 @@ There is a run script that performs adapter trimming, host read removal, alignme
 
 `./src/run.sh <read.1.fq.gz> <read.2.fq.gz> <unique_sample_id>`
 
+## Output
+
+The main output files are:
+
+* The adapter-trimmed and host-read filtered FASTQ files are: `ls <unique_sample_id>/<unique_sample_id>.filtered.R_[12].fq.gz`
+
+* The alignment to SARS-CoV-2: `ls <unique_sample_id>/<unique_sample_id>.srt.bam`
+
+* The consensus sequence: `ls <unique_sample_id>/<unique_sample_id>.cons.fa`
+
+* The annotated variants: `ls <unique_sample_id>/<unique_sample_id>.variants.tsv`
+
+* The summary QC report: `ls <unique_sample_id>/<unique_sample_id>.qc.summary`
+
+
 ## Example
 
 The repository contains an example script using a [COG-UK](https://www.cogconsortium.uk/) data set.

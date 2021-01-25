@@ -104,13 +104,17 @@ filep = args.prefix + ".bcf"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
     vcf = cyvcf2.VCF(filep)
     ncount = 0
+    indels = False
     mtct = collections.Counter()
     for record in vcf:
         mt = record.REF + ">" + record.ALT[0]
+        if len(mt) != 3:
+            indels = True
         mtct[mt] += 1
         ncount += 1
     qc['MutationTypes'] = json.dumps(mtct).replace(' ','')
     qc['#CalledVariants'] = ncount
+    qc['InDelsPresent'] = indels
 
 # Consensus composition
 filep = args.prefix + ".cons.comp"
