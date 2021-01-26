@@ -19,10 +19,10 @@ OUTP=${3}
 STDDB=${BASEDIR}/../kraken2/stdDB/
 THREADS=4
 
-# Check standard DB
-if [ ! -d ${STDDB} ]; then echo "${STDDB} not found!"; exit; fi
-
-# Kraken2 standard DB filtering
-kraken2 --paired --db ${STDDB} --threads ${THREADS} --output ${OUTP}.kraken2.out.txt --report ${OUTP}.kraken2.report.txt --unclassified-out ${OUTP}.filtered.R#.fq ${FQ1} ${FQ2}
-gzip ${OUTP}.filtered.R_1.fq
-gzip ${OUTP}.filtered.R_2.fq
+# Only run if kraken2 standard DB present
+if [ -d ${STDDB} ]
+then    
+    # Kraken2 standard DB filtering
+    kraken2 --paired --db ${STDDB} --threads ${THREADS} --output ${OUTP}.kraken2.out.txt --report ${OUTP}.contamination.report.txt ${FQ1} ${FQ2}
+    rm ${OUTP}.kraken2.out.txt
+fi

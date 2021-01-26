@@ -26,4 +26,6 @@ alfred pwalign -q -f h -a ${OUTP}.align.fa.gz ${REF} ${OUTP}.in.fasta
 rm ${OUTP}.in.fasta
 
 # Compute summary QC table
+gunzip ${OUTP}.alfred.tsv.gz
 python ${BASEDIR}/qc.py -p ${OUTP} > ${OUTP}.qc.summary
+gzip ${OUTP}.alfred.tsv

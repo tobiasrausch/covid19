@@ -55,8 +55,30 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
             if line.strip().endswith("read1"):
                 fields = ' '.join(line.split()).split(' ')
                 sarsreads = int(fields[0])
-                qc['FractionSars'] = float(sarsreads) / float(allreads)                
+                qc['FractionSars'] = float(sarsreads) / float(allreads)
 
+# Parse alignment statistics
+filep = args.prefix + ".alfred.tsv"
+if (os.path.exists(filep)) and (os.path.isfile(filep)):
+    with open(filep) as f:
+        columns = None
+        for line in f:
+            if line.startswith("ME"):
+                if columns is None:
+                    columns = line.strip().split('\t')
+                else:
+                    records = line.strip().split('\t')
+                    qc['FractionUnmapped'] = records[columns.index('UnmappedFraction')]
+                    qc['FractionSupplementaryAlignments'] = records[columns.index('SupplementaryAlignmentFraction')]
+                    qc['FractionMismatch'] = records[columns.index('MismatchRate')]
+                    qc['FractionInsertion'] = records[columns.index('InsertionRate')]
+                    qc['FractionDeletion'] = records[columns.index('DeletionRate')]
+                    qc['FractionSoftClip'] = records[columns.index('SoftClipRate')]
+                    qc['FractionSequencingErrors'] = records[columns.index('ErrorRate')]
+                    qc['MedianCoverage'] = records[columns.index('MedianCoverage')]
+                    qc['SDCoverage'] = records[columns.index('SDCoverage')]
+                    qc['MedianInsertSize'] = records[columns.index('MedianInsertSize')]
+                    
 # Coverage
 filep = args.prefix + ".depth"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
@@ -64,19 +86,16 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
     npos = 0
     zerocov = 0
     below10 = 0
-    totcov = 0
     for fields in f_reader:
         cov = int(fields[2])
         if cov == 0:
             zerocov += 1
         if cov < 10:
             below10 += 1
-        totcov += cov
         npos += 1
     qc['#CoverageEqual0'] = zerocov
     qc['#CoverageBelow10'] = below10
     qc['ReferenceLength'] = npos
-    qc['MeanCoverage'] = float(totcov) / float(npos)
 
 # Mutation file
 filep = args.prefix + ".mutation.csv"
@@ -86,7 +105,7 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
     for fields in f_reader:
         if nline == 1:
             ct = collections.Counter(fields)
-            qc['#MissingKeyMutations'] = ct['X']
+            qc['#CovDropoutsKeyMutations'] = ct['X']
             qc['MutationString'] = ','.join(fields)
         nline += 1
 
@@ -105,7 +124,7 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
         ncount += 1
     qc['MutationTypes'] = json.dumps(mtct).replace(' ','')
     qc['#CalledVariants'] = ncount
-    qc['InDelsPresent'] = indels
+    qc['InDelMutationsPresent'] = indels
 
 # Consensus composition
 filep = args.prefix + ".cons.comp"
@@ -139,11 +158,11 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
 qc['outcome'] = "fail"
 if qc["#CalledVariants"] < 30:
     if qc['#ConsensusNs'] < 1000:
-        if qc['#MissingKeyMutations'] == 0:
+        if qc['#CovDropoutsKeyMutations'] == 0:
             if qc['FractionGRCh38'] < 0.5:
                 if qc['iVarFreeBayesDiff'] == 0:
                     qc['outcome'] = "pass"
-        
+
 # Output QC dictionary
 for key in sorted(qc.keys()):
     print(key, qc[key])
