@@ -14,6 +14,7 @@ parser.add_argument('-p', '--prefix', metavar='prefix', required=True, dest='pre
 args = parser.parse_args()
 
 qc = dict()
+qc['Sample'] = args.prefix
 
 # Trim galore
 for rn in ["1", "2"]:
@@ -36,7 +37,7 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
             if line.strip().endswith(".remove.reads"):
                 grch38reads = int(line.strip().split(' ')[0])
         qc['#ReadPairs'] = allreads
-        qc['FractionGRCh38'] = float(grch38reads) / float(allreads)
+        qc['MappingFractionGRCh38'] = float(grch38reads) / float(allreads)
 
 # Host reads (kraken2 human DB)
 filep = args.prefix + ".kraken2.report.txt"
@@ -55,7 +56,7 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
             if line.strip().endswith("read1"):
                 fields = ' '.join(line.split()).split(' ')
                 sarsreads = int(fields[0])
-                qc['FractionSars'] = float(sarsreads) / float(allreads)
+                qc['MappingFractionSars'] = float(sarsreads) / float(allreads)
 
 # Parse alignment statistics
 filep = args.prefix + ".alfred.tsv"
@@ -174,7 +175,7 @@ qc['outcome'] = "fail"
 if qc["#CalledVariants"] < 30:
     if qc['#ConsensusNs'] < 1000:
         if qc['#CovDropoutsKeyMutations'] == 0:
-            if qc['FractionGRCh38'] < 0.5:
+            if qc['MappingFractionGRCh38'] < 0.5:
                 if qc['iVarFreeBayesDiff'] == 0:
                     qc['outcome'] = "pass"
 

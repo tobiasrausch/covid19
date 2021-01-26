@@ -33,11 +33,11 @@ cd ${OUTP}
 # Trim adapters
 ${BASEDIR}/trim.sh ${OUTP}.1.fq.gz ${OUTP}.2.fq.gz ${OUTP}
 
+# Unbiased contamination assessment (optional: requires kraken2 standard DB)
+${BASEDIR}/contamination.sh ${OUTP}_val_1.fq.gz ${OUTP}_val_2.fq.gz ${OUTP}
+
 # Clean host reads
 ${BASEDIR}/clean.sh ${OUTP}_val_1.fq.gz ${OUTP}_val_2.fq.gz ${OUTP}
-
-# Remaining contamination assessment (optional: requires kraken2 standard DB)
-${BASEDIR}/contamination.sh ${OUTP}.filtered.R_1.fq.gz ${OUTP}.filtered.R_2.fq.gz ${OUTP}
 
 # Alignment
 ${BASEDIR}/align.sh ${OUTP}.filtered.R_1.fq.gz ${OUTP}.filtered.R_2.fq.gz ${OUTP}
