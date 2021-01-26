@@ -141,6 +141,21 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
         qc['#ConsensusNs'] = ncount
         qc['#ConsensusAmbiguous'] = ambcount
 
+# Primer trimming
+filep = args.prefix + ".iVar.trim"
+if (os.path.exists(filep)) and (os.path.isfile(filep)):
+    with open(filep) as f:
+        for line in f:
+            if line.startswith('Trimmed primers from'):
+                fields = line.strip().split(' ')
+                qc['PrimerTrimmed'] = fields[3]
+            elif line.strip().endswith('and were not written to file.'):
+                fields = line.strip().split(' ')
+                qc['PrimerTrimmedTooShort'] = fields[0]
+            elif line.strip().endswith('insert size smaller than their read length'):
+                fields = line.strip().split(' ')
+                qc['PrimerTrimmedISizeIssue'] = fields[0]
+
 # Freebayes & iVar diff
 filep = args.prefix + ".cons.diff"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):

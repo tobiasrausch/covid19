@@ -17,6 +17,7 @@ FQ1=${1}
 FQ2=${2}
 OUTP=${3}
 REF=${BASEDIR}/../ref/NC_045512.2.fa
+PRIMER=${BASEDIR}/../ref/nCoV-2019.primer.bed
 THREADS=4
 
 # Alignment
@@ -28,7 +29,11 @@ samtools flagstat ${OUTP}.srt.bam > ${OUTP}.srt.bam.flagstat
 alfred qc -r ${REF} -j ${OUTP}.alfred.json.gz -o ${OUTP}.alfred.tsv.gz ${OUTP}.srt.bam
 
 # Mask priming regions
-ivar trim -e -i ${OUTP}.srt.bam -b ${BASEDIR}/../ref/nCoV-2019.primer.bed  -p ${OUTP}.trim
+ivar trim -e -i ${OUTP}.srt.bam -b ${PRIMER}  -p ${OUTP}.trim > ${OUTP}.iVar.trim
 samtools sort -@ ${THREADS} -o ${OUTP}.trim.srt.bam ${OUTP}.trim.bam
 samtools index ${OUTP}.trim.srt.bam
 rm ${OUTP}.trim.bam
+
+# Replace alignments
+mv ${OUTP}.trim.srt.bam ${OUTP}.srt.bam
+mv ${OUTP}.trim.srt.bam.bai ${OUTP}.srt.bam.bai
