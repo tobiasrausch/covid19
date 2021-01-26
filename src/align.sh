@@ -26,3 +26,9 @@ samtools flagstat ${OUTP}.srt.bam > ${OUTP}.srt.bam.flagstat
 
 # Alignment QC
 alfred qc -r ${REF} -j ${OUTP}.alfred.json.gz -o ${OUTP}.alfred.tsv.gz ${OUTP}.srt.bam
+
+# Mask priming regions
+ivar trim -e -i ${OUTP}.srt.bam -b ${BASEDIR}/../ref/nCoV-2019.primer.bed  -p ${OUTP}.trim
+samtools sort -@ ${THREADS} -o ${OUTP}.trim.srt.bam ${OUTP}.trim.bam
+samtools index ${OUTP}.trim.srt.bam
+rm ${OUTP}.trim.bam
