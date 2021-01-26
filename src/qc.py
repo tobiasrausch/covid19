@@ -47,15 +47,6 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
                 fields = ' '.join(line.split()).split(' ')
                 qc['Kraken2AddHumanReads'] = fields[2]
 
-# PercentDuplication
-filep = args.prefix + ".rmdup.tsv"
-if (os.path.exists(filep)) and (os.path.isfile(filep)):
-    with open(filep) as f:
-        for line in f:
-            if line.strip().startswith("Unknown Library"):
-                fields = ' '.join(line.split()).split(' ')
-                qc['DuplicateRate'] = fields[8]
-
 # SARS-CoV-2 reads
 filep = args.prefix + ".srt.bam.flagstat"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):

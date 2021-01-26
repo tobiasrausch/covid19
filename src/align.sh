@@ -19,10 +19,8 @@ OUTP=${3}
 REF=${BASEDIR}/../ref/NC_045512.2.fa
 THREADS=4
 
-# Alignment and mark duplicates
+# Alignment
 bwa mem -R "@RG\tID:${OUTP}\tSM:${OUTP}" -t ${THREADS} ${REF} ${FQ1} ${FQ2} | samtools sort -@ ${THREADS} -o ${OUTP}.srt.bam
-bammarkduplicates markthreads=${THREADS} tmpfile=${OUTP}_`date +'%H%M%S'` I=${OUTP}.srt.bam O=${OUTP}.rmdup.bam M=${OUTP}.rmdup.tsv index=0 rmdup=0
-mv ${OUTP}.rmdup.bam ${OUTP}.srt.bam
 samtools index ${OUTP}.srt.bam
 samtools flagstat ${OUTP}.srt.bam > ${OUTP}.srt.bam.flagstat
 
