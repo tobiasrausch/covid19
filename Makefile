@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 
 # Targets
-TARGETS = .conda .channels .install .check
+TARGETS = .conda .channels .install .check .pangolin
 PBASE=$(shell pwd)
 
 all:   	$(TARGETS)
@@ -18,5 +18,8 @@ all:   	$(TARGETS)
 .check: .conda .channels .install
 	export PATH=${PBASE}/conda/bin:${PATH} && samtools --version && bcftools --version && bedtools --version && bgzip --version && tabix --version && trim_galore --version && delly --version && ivar version && touch .check
 
+.pangolin: .conda .channels .install .check
+	export PATH=${PBASE}/conda/bin:${PATH} && git clone --recursive https://github.com/cov-lineages/pangolin.git && cd pangolin && conda env create -f environment.yml && source activate pangolin && python setup.py install && pangolin --update && pangolin -v && pangolin -pv && pangolin -lv && cd ../ && touch .pangolin
+
 clean:
-	rm -rf $(TARGETS) $(TARGETS:=.o) conda/
+	rm -rf $(TARGETS) $(TARGETS:=.o) conda/ pangolin/

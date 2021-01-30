@@ -2,8 +2,10 @@
 .check
 .conda
 .install
+.pangolin
 conda/
 data/
+pangolin/
 *~
 
 # python
