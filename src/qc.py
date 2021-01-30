@@ -198,12 +198,11 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
 
 # Determine success/fail for this sample
 qc['outcome'] = "fail"
-if qc["#CalledVariants"] < 30:
-    if qc['#ConsensusNs'] < 1000:
+if qc["#CalledVariants"] < 50:
+    if qc['#ConsensusNs'] < 2000:
         if qc['#CovDropoutsKeyMutations'] == 0:
             if qc['MappingFractionGRCh38'] < 0.5:
-                if qc['iVarFreeBayesDiff'] == 0:
-                    qc['outcome'] = "pass"
+                qc['outcome'] = "pass"
 
 # Output QC dictionary
 for key in sorted(qc.keys()):
