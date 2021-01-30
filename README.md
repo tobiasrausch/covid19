@@ -36,6 +36,8 @@ The main output files are:
 
 * The annotated variants: `ls <unique_sample_id>.variants.tsv`
 
+* The assigned lineage: `ls <unique_sample_id>.lineage.csv`
+
 * The summary QC report: `ls <unique_sample_id>.qc.summary`
 
 

@@ -48,6 +48,9 @@ ${BASEDIR}/call.sh ${OUTP}.srt.bam ${OUTP}
 # Consensus computation
 ${BASEDIR}/consensus.sh ${OUTP}.srt.bam ${OUTP}
 
+# Lineage assignment
+${BASEDIR}/lineage.sh ${OUTP}.cons.fa ${OUTP}
+
 # Quality control
 ${BASEDIR}/qc.sh ${OUTP}.cons.fa ${OUTP}
 

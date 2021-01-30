@@ -2,15 +2,14 @@
 
 import csv
 import argparse
-import sys
 import collections
-import cyvcf2
 import os
 import json
+import cyvcf2
 
 # Parse command line
 parser = argparse.ArgumentParser(description='Aggregate QC statistics')
-parser.add_argument('-p', '--prefix', metavar='prefix', required=True, dest='prefix', help='file prefix (required)')
+parser.add_argument('-p', '--prefix', required=True, dest='prefix', help='file prefix (required)')
 args = parser.parse_args()
 
 qc = dict()
@@ -79,7 +78,7 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
                     qc['MedianCoverage'] = records[columns.index('MedianCoverage')]
                     qc['SDCoverage'] = records[columns.index('SDCoverage')]
                     qc['MedianInsertSize'] = records[columns.index('MedianInsertSize')]
-                    
+
 # Coverage
 filep = args.prefix + ".depth"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
@@ -123,7 +122,7 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
             indels = True
         mtct[mt] += 1
         ncount += 1
-    qc['MutationTypes'] = json.dumps(mtct).replace(' ','')
+    qc['MutationTypes'] = json.dumps(mtct).replace(' ', '')
     qc['#CalledVariants'] = ncount
     qc['InDelMutationsPresent'] = indels
 
@@ -170,6 +169,16 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
                     diffct += 1
         qc['iVarFreeBayesDiff'] = diffct
 
+# Parse pangolin lineage
+filep = args.prefix + ".lineage.csv"
+print(filep)
+if (os.path.exists(filep)) and (os.path.isfile(filep)):
+    f_reader = csv.DictReader(open(filep), delimiter=",")
+    for fields in f_reader:
+        qc['Lineage'] = fields['lineage']
+        qc['Status'] = fields['status']
+        qc['LineageProb'] = fields['probability']
+
 # Determine success/fail for this sample
 qc['outcome'] = "fail"
 if qc["#CalledVariants"] < 30:
@@ -177,7 +186,8 @@ if qc["#CalledVariants"] < 30:
         if qc['#CovDropoutsKeyMutations'] == 0:
             if qc['MappingFractionGRCh38'] < 0.5:
                 if qc['iVarFreeBayesDiff'] == 0:
-                    qc['outcome'] = "pass"
+                    if qc['Status'] == 'passed_qc':
+                        qc['outcome'] = "pass"
 
 # Output QC dictionary
 for key in sorted(qc.keys()):
