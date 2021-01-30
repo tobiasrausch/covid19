@@ -126,6 +126,15 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
     qc['#CalledVariants'] = ncount
     qc['InDelMutationsPresent'] = indels
 
+# Parse variants tsv file
+filep = args.prefix + ".variants.tsv"
+if (os.path.exists(filep)) and (os.path.isfile(filep)):
+    f_reader = csv.DictReader(open(filep), delimiter="\t")
+    varct = collections.Counter()
+    for fields in f_reader:
+        varct[fields['Consequence']] += 1
+    qc['Consequence'] = json.dumps(varct).replace(' ', '')
+
 # Consensus composition
 filep = args.prefix + ".cons.comp"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
@@ -171,13 +180,21 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
 
 # Parse pangolin lineage
 filep = args.prefix + ".lineage.csv"
-print(filep)
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
     f_reader = csv.DictReader(open(filep), delimiter=",")
     for fields in f_reader:
         qc['Lineage'] = fields['lineage']
-        qc['Status'] = fields['status']
+        qc['PangolinStatus'] = fields['status']
         qc['LineageProb'] = fields['probability']
+
+# Nextclade
+filep = args.prefix + ".json"
+if (os.path.exists(filep)) and (os.path.isfile(filep)):
+    with open(filep) as json_file:
+        data = json.load(json_file)
+        for p in data:
+            qc['Clade'] = p['clade']
+            qc['NextcladeStatus'] = p['qc']['overallStatus']
 
 # Determine success/fail for this sample
 qc['outcome'] = "fail"
@@ -186,8 +203,7 @@ if qc["#CalledVariants"] < 30:
         if qc['#CovDropoutsKeyMutations'] == 0:
             if qc['MappingFractionGRCh38'] < 0.5:
                 if qc['iVarFreeBayesDiff'] == 0:
-                    if qc['Status'] == 'passed_qc':
-                        qc['outcome'] = "pass"
+                    qc['outcome'] = "pass"
 
 # Output QC dictionary
 for key in sorted(qc.keys()):

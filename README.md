@@ -40,30 +40,11 @@ The main output files are:
 
 * The summary QC report: `ls <unique_sample_id>.qc.summary`
 
-
 ## Example
 
 The repository contains an example script using a [COG-UK](https://www.cogconsortium.uk/) data set.
 
 `cd example/ && ./expl.sh`
-
-## Phylogeny (optional)
-
-Phylogenetic inferences can be done using multiple consensus sequences.
-
-`./src/phylogeny.sh <output_prefix> <s1.fa> <s2.fa> ... <sN.fa>`
-
-To visualize the output tree file you can, for instance, use [iTol](https://itol.embl.de/).
-
-## Nextclade (optional)
-
-Using nextclade you can directly get clade assignments (requires docker)
-
-`./src/nextclade.sh <output_prefix> <s1.fa> <s2.fa> ... <sN.fa>`
-
-You can upload `<output_prefix>.fasta` at [Nextclade](https://clades.nextstrain.org/) or inspect the JSON directly.
-
-`jq '.[] | "\(.seqName) \(.clade)" ' <output_prefix>.json` 
 
 ## Credits
 
