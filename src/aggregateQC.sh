@@ -23,3 +23,7 @@ do
 done
 cat ${OUTP}.aggr.qc.tsv | sort -r | uniq > ${OUTP}.aggr.qc.tmp
 mv ${OUTP}.aggr.qc.tmp ${OUTP}.aggr.qc.tsv
+
+# Helpers
+head -n 1 ${OUTP}.aggr.qc.tsv | tr '\t' '\n' | awk '{print NR"\t"$1;}'
+cut -f 1,2,3,10,21,22,25,29,30,36,38 ${OUTP}.aggr.qc.tsv | grep -v -P "\tfail$"
