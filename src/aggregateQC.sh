@@ -16,10 +16,10 @@ export PATH=${BASEDIR}/../conda/bin:${PATH}
 OUTP=${1}
 shift 1
 
-rm -f ${OUTP}.aggr.qc
+rm -f ${OUTP}.aggr.qc.tsv
 for F in $@
 do
-    cat ${F} | datamash -t ' ' transpose >> ${OUTP}.aggr.qc
+    cat ${F} | sed -e 's/ /\t/' | datamash transpose >> ${OUTP}.aggr.qc.tsv
 done
-cat ${OUTP}.aggr.qc | sort -r | uniq > ${OUTP}.aggr.qc.tmp
-mv ${OUTP}.aggr.qc.tmp ${OUTP}.aggr.qc
+cat ${OUTP}.aggr.qc.tsv | sort -r | uniq > ${OUTP}.aggr.qc.tmp
+mv ${OUTP}.aggr.qc.tmp ${OUTP}.aggr.qc.tsv
