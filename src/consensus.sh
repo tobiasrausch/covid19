@@ -25,6 +25,9 @@ samtools mpileup -A -d 10000 -B -Q 0 --reference ${REF} ${BAM} | ivar variants -
 # Consensus
 samtools mpileup -aa -A -d 10000 -B -Q 0 ${BAM} | ivar consensus -t 0.7 -m 10 -n N -p ${OUTP}.cons
 
+# Fix header
+sed -i "s/^>.*$/>${OUTP}/" ${OUTP}.cons.fa
+
 # Nucleotide composition
 tail -n +2 ${OUTP}.cons.fa | sed 's/\(.\)/\1\n/g' | grep "." | sort | uniq -c > ${OUTP}.cons.comp
 
