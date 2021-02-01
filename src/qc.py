@@ -190,6 +190,7 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
         qc['LineageProb'] = fields['probability']
 
 # Nextclade
+qc['NextcladeStatus'] = None
 filep = args.prefix + ".json"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
     with open(filep) as json_file:
@@ -201,8 +202,6 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
                 qc['Clade'] = None
             if 'qc' in p.keys():
                 qc['NextcladeStatus'] = p['qc']['overallStatus']
-            else:
-                qc['NextcladeStatus'] = None
 
 # Determine success/borderline/fail for this sample
 qc['outcome'] = "fail"
