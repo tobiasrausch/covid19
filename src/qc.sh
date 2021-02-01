@@ -18,12 +18,16 @@ OUTP=${2}
 REF=${BASEDIR}/../ref/NC_045512.2.fa
 THREADS=4
 
-# Trim leading and trailing Ns, replace IUPAC ambiguous characters with N
-cat ${FASTA} | sed 's/^N*//' | sed 's/N*$//' | tr 'RYSWKMBDHV' 'NNNNNNNNNN' > ${OUTP}.in.fasta
+# Alignment to SARS-CoV-2 reference
+if [ ! -f ${OUTP}.align.fa.gz ]
+then
+    # Trim leading and trailing Ns, replace IUPAC ambiguous characters with N
+    cat ${FASTA} | sed 's/^N*//' | sed 's/N*$//' | tr 'RYSWKMBDHV' 'NNNNNNNNNN' > ${OUTP}.in.fasta
 
-# Alignment to the reference (end-gaps free in reference)
-alfred pwalign -q -f h -a ${OUTP}.align.fa.gz ${REF} ${OUTP}.in.fasta
-rm ${OUTP}.in.fasta
+    # Alignment to the reference (end-gaps free in reference)
+    alfred pwalign -q -f h -a ${OUTP}.align.fa.gz ${REF} ${OUTP}.in.fasta
+    rm ${OUTP}.in.fasta
+fi
 
 # Compute summary QC table
 gunzip ${OUTP}.alfred.tsv.gz

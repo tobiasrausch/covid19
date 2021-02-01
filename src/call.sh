@@ -20,7 +20,7 @@ ANNO=${BASEDIR}/../ref/NC_045512.2.anno.bcf
 THREADS=4
 
 # call variants
-freebayes --ploidy 1 --no-partial-observations --min-alternate-count 10 --report-genotype-likelihood-max --min-alternate-fraction 0.75 --fasta-reference ${REF} --genotype-qualities -v ${OUTP}.vcf ${BAM}
+freebayes --ploidy 1 --no-partial-observations --min-alternate-count 10 --report-genotype-likelihood-max --min-alternate-fraction 0.15 --fasta-reference ${REF} --genotype-qualities -v ${OUTP}.vcf ${BAM}
 bgzip ${OUTP}.vcf
 tabix ${OUTP}.vcf.gz
 

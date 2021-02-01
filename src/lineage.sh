@@ -20,9 +20,12 @@ THREADS=4
 # Run pangolin
 if [ -f ${FASTA} ]
 then
-    source activate pangolin
-    pangolin -t ${THREADS} --outfile ${OUTP}.lineage.csv ${FASTA}
-    conda deactivate
+    if [ ! -f ${OUTP}.lineage.csv ]
+    then
+	source activate pangolin
+	pangolin -t ${THREADS} --outfile ${OUTP}.lineage.csv ${FASTA}
+	conda deactivate
+    fi
 
     # Optional: nextclade (requires docker)
     if command -v docker &> /dev/null

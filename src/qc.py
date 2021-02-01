@@ -39,13 +39,15 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
         qc['MappingFractionGRCh38'] = float(grch38reads) / float(allreads)
 
 # Host reads (kraken2 human DB)
+kraken2addreads = 0
 filep = args.prefix + ".kraken2.report.txt"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
     with open(filep) as f:
         for line in f:
             if line.strip().endswith("Homo sapiens"):
                 fields = ' '.join(line.split()).split(' ')
-                qc['Kraken2AddHumanReads'] = fields[2]
+                kraken2addreads = fields[2]
+qc['Kraken2AddHumanReads'] = kraken2addreads
 
 # SARS-CoV-2 reads
 filep = args.prefix + ".srt.bam.flagstat"
@@ -193,16 +195,29 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
     with open(filep) as json_file:
         data = json.load(json_file)
         for p in data:
-            qc['Clade'] = p['clade']
-            qc['NextcladeStatus'] = p['qc']['overallStatus']
+            if 'clade' in p.keys():
+                qc['Clade'] = p['clade']
+            else:
+                qc['Clade'] = None
+            if 'qc' in p.keys():
+                qc['NextcladeStatus'] = p['qc']['overallStatus']
+            else:
+                qc['NextcladeStatus'] = None
 
-# Determine success/fail for this sample
+# Determine success/borderline/fail for this sample
 qc['outcome'] = "fail"
 if qc["#CalledVariants"] < 50:
-    if qc['#ConsensusNs'] < 2000:
-        if qc['#CovDropoutsKeyMutations'] == 0:
-            if qc['MappingFractionGRCh38'] < 0.5:
+    if qc['#ConsensusNs'] < 5000:
+        if qc['MappingFractionGRCh38'] < 0.7:
+            ncstatus = 'good'
+            if qc['NextcladeStatus'] is not None:
+                ncstatus = qc['NextcladeStatus']
+            if (qc['PangolinStatus'] == 'passed_qc') and (ncstatus == 'good'):
                 qc['outcome'] = "pass"
+            elif (qc['PangolinStatus'] == 'passed_qc') or (ncstatus == 'good'):
+                qc['outcome'] = "borderline"
+            else:
+                qc['outcome'] = "fail"
 
 # Output QC dictionary
 for key in sorted(qc.keys()):
