@@ -12,6 +12,7 @@ parser.add_argument('-v', '--variants', metavar='sample.bcf', required=True, des
 parser.add_argument('-d', '--depth', metavar='sample.depth', required=True, dest='depth', help='depth file (required)')
 parser.add_argument('-c', '--coverage', metavar='10', default=10, type=int, required=False, dest='thres', help='coverage threshold (optional)')
 parser.add_argument('-l', '--lowest', metavar='LOW', default='LOW', required=False, dest='lowest', help='lowest VEP impact to report (optional)')
+parser.add_argument('-s', '--sample', metavar='s1', required=True, dest='sample', help='sample name (required)')
 parser.add_argument('-o', '--output', metavar='out.csv', required=True, dest='outfile', help='output file (required)')
 args = parser.parse_args()
 
@@ -42,11 +43,11 @@ for idx, val in enumerate(vepcols):
 # VCF/BCF parsing
 varstore = collections.defaultdict(collections.defaultdict)
 vcf = cyvcf2.VCF(args.variants)
-print("reference", "position", "REF", "ALT", '\t'.join(descols), sep='\t')
+print("sample", "reference", "position", "REF", "ALT", '\t'.join(descols), sep='\t')
 for record in vcf:
     csq = record.INFO.get('CSQ')
     if csq is None:
-        print(record.CHROM, record.POS, record.REF, ','.join(record.ALT), "unknown_variant", sep='\t')
+        print(args.sample, record.CHROM, record.POS, record.REF, ','.join(record.ALT), "unknown_variant", sep='\t')
         continue
     transcripts = csq.split(',')
     for tr in transcripts:
@@ -58,7 +59,7 @@ for record in vcf:
             size = len(record.ALT[0]) - len(record.REF)   # deletions negative, insertions positive
             varstore[record.POS][fields[addr['Feature']]] = (size, fields[addr['Protein_position']], fields[addr["Amino_acids"]])
         if impact[fields[addr['IMPACT']]] >= lowestimpact:
-            print(record.CHROM, record.POS, record.REF, ','.join(record.ALT), '\t'.join([fields[addr[cname]] for cname in descols]), sep='\t')
+            print(args.sample, record.CHROM, record.POS, record.REF, ','.join(record.ALT), '\t'.join([fields[addr[cname]] for cname in descols]), sep='\t')
 
 
 # Lineage matching (COG-UK scheme)
@@ -108,6 +109,6 @@ with open(args.outfile, 'w') as fout:
                         if size == -6:
                             aaobs = 'del'
         obs.append(aaobs)
-    print(','.join(mutorder), sep=',', file=fout)
-    print(','.join(obs), sep=',', file=fout)
+    print('sample', ','.join(mutorder), sep=',', file=fout)
+    print(args.sample, ','.join(obs), sep=',', file=fout)
     fout.close()

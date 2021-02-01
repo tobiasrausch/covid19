@@ -42,4 +42,4 @@ rm ${OUTP}.filtered.bcf ${OUTP}.filtered.bcf.csi
 samtools depth -aa -d 0 ${BAM} > ${OUTP}.depth
 
 # generate tab-delimited variant table (IMPACT >= LOW) and key mutation string (csv)
-python ${BASEDIR}/call.py -d ${OUTP}.depth -v ${OUTP}.bcf -o ${OUTP}.mutation.csv > ${OUTP}.variants.tsv
+python ${BASEDIR}/call.py -s ${OUTP} -d ${OUTP}.depth -v ${OUTP}.bcf -o ${OUTP}.mutation.csv > ${OUTP}.variants.tsv
