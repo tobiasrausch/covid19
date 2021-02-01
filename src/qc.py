@@ -36,7 +36,7 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
             if line.strip().endswith(".remove.reads"):
                 grch38reads = int(line.strip().split(' ')[0])
         qc['#ReadPairs'] = allreads
-        qc['MappingFractionGRCh38'] = float(grch38reads) / float(allreads)
+        qc['MappingFractionGRCh38'] = str(round(float(grch38reads) / float(allreads), 4))
 
 # Host reads (kraken2 human DB)
 kraken2addreads = 0
@@ -57,7 +57,7 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
             if line.strip().endswith("read1"):
                 fields = ' '.join(line.split()).split(' ')
                 sarsreads = int(fields[0])
-                qc['MappingFractionSars'] = float(sarsreads) / float(allreads)
+                qc['MappingFractionSars'] = str(round(float(sarsreads) / float(allreads), 4))
 
 # Parse alignment statistics
 filep = args.prefix + ".alfred.tsv"
@@ -208,16 +208,15 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
 qc['outcome'] = "fail"
 if qc["#CalledVariants"] < 50:
     if qc['#ConsensusNs'] < 5000:
-        if qc['MappingFractionGRCh38'] < 0.7:
-            ncstatus = 'good'
-            if qc['NextcladeStatus'] is not None:
-                ncstatus = qc['NextcladeStatus']
-            if (qc['PangolinStatus'] == 'passed_qc') and (ncstatus == 'good'):
-                qc['outcome'] = "pass"
-            elif (qc['PangolinStatus'] == 'passed_qc') or (ncstatus == 'good'):
-                qc['outcome'] = "borderline"
-            else:
-                qc['outcome'] = "fail"
+        ncstatus = 'good'
+        if qc['NextcladeStatus'] is not None:
+            ncstatus = qc['NextcladeStatus']
+        if (qc['PangolinStatus'] == 'passed_qc') and (ncstatus == 'good'):
+            qc['outcome'] = "pass"
+        elif (qc['PangolinStatus'] == 'passed_qc') or (ncstatus == 'good'):
+            qc['outcome'] = "borderline"
+        else:
+            qc['outcome'] = "fail"
 
 # Output QC dictionary
 for key in sorted(qc.keys()):
