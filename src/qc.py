@@ -172,13 +172,23 @@ filep = args.prefix + ".cons.diff"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
     with open(filep) as f:
         diffct = 0
+        ivarct = 0
+        freect = 0
         for line in f:
+            if line.startswith('<'):
+                ivarct += 1
+            elif line.startswith('>'):
+                freect += 1
             if line.startswith('<'):
                 fields = ' '.join(line.split()).split(' ')
                 # Any diff for non-N and non-ambiguous
                 if fields[1] not in ["R", "Y", "S", "W", "K", "M", "B", "D", "H", "V", "N"]:
                     diffct += 1
-        qc['iVarFreeBayesDiff'] = diffct
+        absdiff = abs(ivarct - freect)
+        if diffct > absdiff:
+            qc['iVarFreeBayesDiff'] = diffct
+        else:
+            qc['iVarFreeBayesDiff'] = absdiff
 
 # Parse pangolin lineage
 filep = args.prefix + ".lineage.csv"
