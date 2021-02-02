@@ -63,18 +63,24 @@ for record in vcf:
 
 
 # Lineage matching (COG-UK scheme)
-mutorder = ['d614g', 'n439k', 'p4715l', 'a222v', 'y453f', 'n501y', 't1001i', 'p681h', 'q27*', 'del_21765_6']
+mutorder = []
 mut = dict()
-mut['d614g'] = (23402, 23404)
-mut['n439k'] = (22877, 22879)
-mut['p4715l'] = (14407, 14409)
-mut['a222v'] = (22226, 22228)
-mut['y453f'] = (22919, 22921)
-mut['n501y'] = (23063, 23065)
-mut['t1001i'] = (3266, 3268)
-mut['p681h'] = (23603, 23605)
-mut['q27*'] = (27972, 27974)
-mut['del_21765_6'] = (21764, 21764)  # last aligned base for coverage
+mut['t1001i'] = (3266, 3268); mutorder.append('t1001i');
+mut['l18f']  =  (21614, 21616); mutorder.append('l18f');
+mut['a222v'] =  (22226, 22228); mutorder.append('a222v');
+mut['t302t'] =  (22466, 22468); mutorder.append('t302t');
+mut['n439k'] =  (22877, 22879); mutorder.append('n439k');
+mut['l452r'] =  (22916, 22918); mutorder.append('l452r');
+mut['y453f'] =  (22919, 22921); mutorder.append('y453f');
+mut['n501y'] =  (23063, 23065); mutorder.append('n501y');
+mut['d614g'] =  (23402, 23404); mutorder.append('d614g');
+mut['a653v'] =  (23519, 23521); mutorder.append('a653v');
+mut['h655y'] =  (23525, 23527); mutorder.append('h655y');
+mut['p681h'] =  (23603, 23605); mutorder.append('p681h');
+mut['d796y'] =  (23948, 23950); mutorder.append('d796y');
+mut['g1219v'] = (25217, 25219); mutorder.append('g1219v');
+mut['q27*'] =   (27972, 27974); mutorder.append('q27*');
+mut['del_21765_6'] = (21764, 21764); mutorder.append('del_21765_6');  # last aligned base for coverage
 if sorted(mut.keys()) != sorted(mutorder):
     print("Mutation disctionaries are inconsisten!", file=sys.stderr)
 
