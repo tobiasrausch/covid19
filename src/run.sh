@@ -54,5 +54,9 @@ ${BASEDIR}/lineage.sh ${OUTP}.cons.fa ${OUTP}
 # Quality control
 ${BASEDIR}/qc.sh ${OUTP}.cons.fa ${OUTP}
 
+# Convert BAM to FASTQ
+${BASEDIR}/bam2fastq.sh ${OUTP}.srt.bam ${OUTP}
+
 # Clean-up
+rm ${OUTP}.filtered.R_1.fq.gz ${OUTP}.filtered.R_2.fq.gz
 rm ${OUTP}.1.fq.gz ${OUTP}.2.fq.gz

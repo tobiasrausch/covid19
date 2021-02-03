@@ -39,7 +39,7 @@ samtools index ${OUTP}.fb.bam
 
 # mask low coverage as N
 head -n 1 ${OUTP}.cons.fa > ${OUTP}.fb.fa
-paste <(tail -n +2 ${OUTP}.fbvar.fa | sed 's/\(.\)/\1\n/g' | grep ".") <(samtools depth -aa -q 20 -d 0 ${OUTP}.fb.bam) | awk '{if ($4<10) {print "N"} else {print $1;} }'  | tr '\n' '#' | sed -e 's/#//g' >> ${OUTP}.fb.fa
+paste <(tail -n +2 ${OUTP}.fbvar.fa | sed 's/\(.\)/\1\n/g' | grep ".") <(samtools depth -aa -q 20 -d 0 ${OUTP}.fb.bam) | awk '{if ($4<10) {print "N"} else {print $1;} }'  | tr -d '\n' | awk '{print $0;}' >> ${OUTP}.fb.fa
 rm ${OUTP}.fbvar.fa* ${OUTP}.fb.bam ${OUTP}.fb.bam.bai
 
 # Compute diff of FreeBayes to iVar consensus
