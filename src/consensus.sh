@@ -37,9 +37,9 @@ bwa index ${OUTP}.fbvar.fa
 bwa mem -R "@RG\tID:${OUTP}\tSM:${OUTP}" -t ${THREADS} ${OUTP}.fbvar.fa ${OUTP}.filtered.R_1.fq.gz ${OUTP}.filtered.R_2.fq.gz | samtools sort -@ ${THREADS} -o ${OUTP}.fb.bam
 samtools index ${OUTP}.fb.bam
 
-# mask low coverage
+# mask low coverage as N
 head -n 1 ${OUTP}.cons.fa > ${OUTP}.fb.fa
-paste <(tail -n +2 ${OUTP}.fbvar.fa | sed 's/\(.\)/\1\n/g' | grep ".") <(samtools depth -aa -d 0 ${OUTP}.fb.bam) | awk '{if ($4<10) {print "N"} else {print $1;} }'  | tr '\n' '#' | sed -e 's/#//g' >> ${OUTP}.fb.fa 
+paste <(tail -n +2 ${OUTP}.fbvar.fa | sed 's/\(.\)/\1\n/g' | grep ".") <(samtools depth -aa -q 20 -d 0 ${OUTP}.fb.bam) | awk '{if ($4<10) {print "N"} else {print $1;} }'  | tr '\n' '#' | sed -e 's/#//g' >> ${OUTP}.fb.fa
 rm ${OUTP}.fbvar.fa* ${OUTP}.fb.bam ${OUTP}.fb.bam.bai
 
 # Compute diff of FreeBayes to iVar consensus

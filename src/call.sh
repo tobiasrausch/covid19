@@ -39,7 +39,7 @@ bcftools index ${OUTP}.bcf
 rm ${OUTP}.filtered.bcf ${OUTP}.filtered.bcf.csi
 
 # compute the depth at each reference position
-samtools depth -aa -d 0 ${BAM} > ${OUTP}.depth
+samtools depth -aa -q 20 -d 0 ${BAM} > ${OUTP}.depth
 
 # generate tab-delimited variant table (IMPACT >= LOW) and key mutation string (csv)
 python ${BASEDIR}/call.py -s ${OUTP} -d ${OUTP}.depth -v ${OUTP}.bcf -o ${OUTP}.mutation.csv > ${OUTP}.variants.tsv
