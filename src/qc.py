@@ -213,6 +213,17 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
             if 'qc' in p.keys():
                 qc['NextcladeStatus'] = p['qc']['overallStatus']
 
+# Vadr
+qc['VadrStatus'] = None
+filep = args.prefix + ".out.vadr.pass.tbl"
+if (os.path.exists(filep)) and (os.path.isfile(filep)):
+    qc['VadrStatus'] = 'fail'
+    with open(filep) as f:
+        for line in f:
+            if line.startswith('>'):
+                qc['VadrStatus'] = 'pass'
+                break
+
 # Determine success/borderline/fail for this sample
 qc['outcome'] = "fail"
 if qc["#CalledVariants"] < 50:
