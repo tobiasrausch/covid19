@@ -87,16 +87,12 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
     f_reader = csv.reader(open(filep), delimiter="\t")
     npos = 0
     zerocov = 0
-    below10 = 0
     for fields in f_reader:
         cov = int(fields[2])
         if cov == 0:
             zerocov += 1
-        if cov < 10:
-            below10 += 1
         npos += 1
     qc['#CoverageEqual0'] = zerocov
-    qc['#CoverageBelow10'] = below10
     qc['ReferenceLength'] = npos
 
 # Mutation file

@@ -10,7 +10,7 @@ import cyvcf2
 parser = argparse.ArgumentParser(description='Create variant table')
 parser.add_argument('-v', '--variants', metavar='sample.bcf', required=True, dest='variants', help='VCF file (required)')
 parser.add_argument('-d', '--depth', metavar='sample.depth', required=True, dest='depth', help='depth file (required)')
-parser.add_argument('-c', '--coverage', metavar='10', default=10, type=int, required=False, dest='thres', help='coverage threshold (optional)')
+parser.add_argument('-c', '--coverage', metavar='20', default=20, type=int, required=False, dest='thres', help='coverage threshold (optional)')
 parser.add_argument('-l', '--lowest', metavar='LOW', default='LOW', required=False, dest='lowest', help='lowest VEP impact to report (optional)')
 parser.add_argument('-s', '--sample', metavar='s1', required=True, dest='sample', help='sample name (required)')
 parser.add_argument('-o', '--output', metavar='out.csv', required=True, dest='outfile', help='output file (required)')
