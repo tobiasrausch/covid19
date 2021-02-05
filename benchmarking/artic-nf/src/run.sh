@@ -27,11 +27,11 @@ if [ ! -f ${ANNO} ]; then echo "${ANNO} not found!"; exit; fi
 if [ ! -f ${YML} ]; then echo "${YML} not found!"; exit; fi
 
 # Stage-in the data for scratch, cloud, ...
+export NXF_HOME=`pwd`
 mkdir -p ${OUTP}
 cp ${FQ1} ${OUTP}/${OUTP}_S1_L001_R1_001.fastq.gz
 cp ${FQ2} ${OUTP}/${OUTP}_S1_L001_R2_001.fastq.gz
 cd ${OUTP}
-export NXF_HOME=`pwd`
 
 # artic nf
 #nextflow run connor-lab/ncov2019-artic-nf --help

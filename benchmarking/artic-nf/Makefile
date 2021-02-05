@@ -19,4 +19,4 @@ all:   	$(TARGETS)
 	export PATH=${PBASE}/conda/bin:${PATH} && nextflow help && git clone --recursive https://github.com/connor-lab/ncov2019-artic-nf.git && git clone --recursive https://github.com/artic-network/artic-ncov2019.git && touch .check
 
 clean:
-	rm -rf $(TARGETS) $(TARGETS:=.o) conda/ ncov2019-artic-nf/
+	rm -rf $(TARGETS) $(TARGETS:=.o) conda/ ncov2019-artic-nf/ artic-ncov2019/
