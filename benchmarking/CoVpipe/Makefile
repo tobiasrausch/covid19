@@ -13,7 +13,7 @@ all:   	$(TARGETS)
 	export PATH=${PBASE}/conda/bin:${PATH} && conda config --add channels defaults && conda config --add channels conda-forge && conda config --add channels bioconda && touch .channels
 
 .install: .conda .channels
-	export PATH=${PBASE}/conda/bin:${PATH} && conda install -y -c bioconda samtools htslib bcftools python -mn covpipe_env && source activate covpipe_env && pip install covpipe && touch .install
+	export PATH=${PBASE}/conda/bin:${PATH} && conda install -y -c bioconda samtools git htslib bcftools python -mn covpipe_env && source activate covpipe_env && pip install covpipe && touch .install
 
 .check: .conda .channels .install
 	export PATH=${PBASE}/conda/bin:${PATH} && source activate covpipe_env && which pip && ncov_minipipe -h && touch .check
