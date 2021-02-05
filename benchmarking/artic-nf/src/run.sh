@@ -10,7 +10,7 @@ fi
 
 SCRIPT=$(readlink -f "$0")
 BASEDIR=$(dirname "$SCRIPT")
-export PATH=/opt/dev/covid19/benchmarking/artic-nf/conda/bin:${PATH}
+export PATH=${BASEDIR}/../conda/bin:${PATH}
 
 # Parameters
 FQ1=${1}   #FASTQ read1
