@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+from readfq import readfq
 import csv
 import argparse
 import collections
@@ -143,17 +144,20 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
     qc['Consequence'] = json.dumps(varct).replace(' ', '')
 
 # Consensus composition
-filep = args.prefix + ".cons.comp"
+filep = args.prefix + ".cons.fa"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
     with open(filep) as f:
         ncount = 0
         ambcount = 0
-        for line in f:
-            fields = ' '.join(line.split()).split(' ')
-            if fields[1] == 'N':
-                ncount += int(fields[0])
-            if (fields[1] != 'A') and (fields[1] != 'C') and (fields[1] != 'G') and (fields[1] != 'T') and (fields[1] != 'N'):
-                ambcount += int(fields[0])
+        dnacount = 0
+        for seqName, seqNuc, seqQuals in readfq(f):
+            for bp in seqNuc:
+                if bp == 'N':
+                    ncount += 1
+                elif (bp == 'A') or (bp == 'C') or (bp == 'G') or (bp == 'T'):
+                    dnacount += 1
+                else:
+                    ambcount += 1
         qc['#ConsensusNs'] = ncount
         qc['#ConsensusAmbiguous'] = ambcount
 

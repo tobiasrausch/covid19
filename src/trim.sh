@@ -24,4 +24,4 @@ fastqc -t ${THREADS} -o prefastqc/ ${FQ1}
 fastqc -t ${THREADS} -o prefastqc/ ${FQ2}
 
 # Adapter trimming
-trim_galore --paired --basename ${OUTP} ${FQ1} ${FQ2} > ${OUTP}.trim_galore.log 2> ${OUTP}.trim_galore.err
+trim_galore --paired --basename ${OUTP} ${FQ1} ${FQ2}
