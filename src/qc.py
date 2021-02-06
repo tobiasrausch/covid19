@@ -36,7 +36,7 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
             if line.strip().endswith(".remove.reads"):
                 grch38reads = int(line.strip().split(' ')[0])
         qc['#ReadPairs'] = allreads
-        qc['MappingFractionGRCh38'] = str(round(float(grch38reads) / float(allreads), 4))
+        qc['PercHuman'] = str(round(float(grch38reads) / float(allreads) * 100, 2)) + "%"
 
 # Host reads (kraken2 human DB)
 kraken2addreads = 0
@@ -57,7 +57,7 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
             if line.strip().endswith("read1"):
                 fields = ' '.join(line.split()).split(' ')
                 sarsreads = int(fields[0])
-                qc['MappingFractionSars'] = str(round(float(sarsreads) / float(allreads), 4))
+                qc['PercSars'] = str(round(float(sarsreads) / float(allreads) * 100, 2)) + "%"
 
 # Parse alignment statistics
 filep = args.prefix + ".alfred.tsv"
@@ -81,6 +81,15 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
                     qc['SDCoverage'] = records[columns.index('SDCoverage')]
                     qc['MedianInsertSize'] = records[columns.index('MedianInsertSize')]
 
+# Percent identity to SARS-CoV-2 reference
+filep = args.prefix + ".alistats"
+if (os.path.exists(filep)) and (os.path.isfile(filep)):
+    with open(filep) as f:
+        for line in f:
+            if line.startswith("Alignment score:"):
+                aliscore = int(line.strip().replace("Alignment score: ",""))
+                qc['PercIdentity'] = str(round(float(aliscore) / float(29903) * 100, 2)) + "%"
+                    
 # Coverage
 filep = args.prefix + ".depth"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):

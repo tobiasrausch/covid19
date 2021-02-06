@@ -16,14 +16,10 @@ export PATH=${BASEDIR}/../conda/bin:${PATH}
 BAM=${1}
 OUTP=${2}
 REF=${BASEDIR}/../ref/NC_045512.2.fa
-GFF=${BASEDIR}/../ref/GCF_009858895.2_ASM985889v3_genomic.gff
 THREADS=4
 
-# Call variants
-samtools mpileup -aa -A -d 10000 -B -Q 0 ${BAM} | ivar variants -r ${REF} -g ${GFF} -m 20 -q 20 -t 0.15 -p ${OUTP}.iVar
-
 # Consensus
-samtools mpileup -aa -A -d 10000 -B -Q 0 ${BAM} | ivar consensus -t 0.9 -m 20 -n N -p ${OUTP}.cons
+samtools mpileup -aa -A -d 0 -B -Q 0 ${BAM} | ivar consensus -t 0.9 -m 20 -n N -p ${OUTP}.cons
 
 # Fix header
 sed -i "s/^>.*$/>${OUTP}/" ${OUTP}.cons.fa

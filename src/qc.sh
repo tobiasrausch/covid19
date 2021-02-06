@@ -24,8 +24,8 @@ then
     # Trim leading and trailing Ns, replace IUPAC ambiguous characters with N
     cat ${FASTA} | sed 's/^N*//' | sed 's/N*$//' | tr 'RYSWKMBDHV' 'NNNNNNNNNN' > ${OUTP}.in.fasta
 
-    # Alignment to the reference (end-gaps free in reference)
-    alfred pwalign -q -f h -a ${OUTP}.align.fa.gz ${REF} ${OUTP}.in.fasta
+    # Alignment to the reference (end-gaps free in reference), score matches as 1 for percent identity
+    alfred pwalign -q -f h -a ${OUTP}.align.fa.gz -g 0 -e 0 -m 1 -n 0 ${REF} ${OUTP}.in.fasta > ${OUTP}.alistats
     rm ${OUTP}.in.fasta
 fi
 

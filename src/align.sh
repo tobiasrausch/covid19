@@ -29,7 +29,7 @@ samtools flagstat ${OUTP}.srt.bam > ${OUTP}.srt.bam.flagstat
 alfred qc -r ${REF} -j ${OUTP}.alfred.json.gz -o ${OUTP}.alfred.tsv.gz ${OUTP}.srt.bam
 
 # Mask priming regions
-ivar trim -e -i ${OUTP}.srt.bam -b ${PRIMER}  -p ${OUTP}.trim > ${OUTP}.iVar.trim
+ivar trim -e -i ${OUTP}.srt.bam -b ${PRIMER} -p ${OUTP}.trim > ${OUTP}.iVar.trim
 samtools sort -@ ${THREADS} -o ${OUTP}.trim.srt.bam ${OUTP}.trim.bam
 samtools index ${OUTP}.trim.srt.bam
 rm ${OUTP}.trim.bam
