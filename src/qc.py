@@ -158,8 +158,11 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
                     dnacount += 1
                 else:
                     ambcount += 1
+        nuclen = ncount + dnacount + ambcount
         qc['#ConsensusNs'] = ncount
         qc['#ConsensusAmbiguous'] = ambcount
+        qc['PercN'] = str(round(float(ncount) / float(nuclen) * 100, 2)) + "%"
+        qc['PercACGT'] = str(round(float(dnacount) / float(nuclen) * 100, 2)) + "%"
 
 # Primer trimming
 filep = args.prefix + ".iVar.trim"
@@ -235,18 +238,23 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
 
 # Determine success/borderline/fail for this sample
 qc['outcome'] = "fail"
-if qc["#CalledVariants"] < 50:
-    if qc['#ConsensusNs'] < 5000:
-        ncstatus = 'good'
-        if qc['NextcladeStatus'] is not None:
-            ncstatus = qc['NextcladeStatus']
-        if (qc['PangolinStatus'] == 'passed_qc') and (ncstatus == 'good'):
-            qc['outcome'] = "pass"
-        elif (qc['PangolinStatus'] == 'passed_qc') or (ncstatus == 'good'):
-            qc['outcome'] = "borderline"
-        else:
-            qc['outcome'] = "fail"
-
+ncstatus = 'good'
+if qc['NextcladeStatus'] is not None:
+    ncstatus = qc['NextcladeStatus']
+if (qc['PangolinStatus'] == 'passed_qc') and (ncstatus == 'good'):
+    qc['outcome'] = "pass"
+elif (qc['PangolinStatus'] == 'passed_qc') or (ncstatus == 'good'):
+    qc['outcome'] = "borderline"
+else:
+    qc['outcome'] = "fail"
+if qc['outcome'] == "pass":
+    qc['outcome'] = "borderline"
+    if float(qc['PercIdentity'][:-1]) >= 90:
+        if float(qc['PercN'][:-1]) <= 5:
+            if float(qc['MedianCoverage']) >= 100:
+                if float(qc['PercACGT'][:-1]) >= 90:
+                    qc['outcome'] = "pass"
+            
 # Output QC dictionary
 for key in sorted(qc.keys()):
     print(key, qc[key])

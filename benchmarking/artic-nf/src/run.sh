@@ -36,3 +36,4 @@ cd ${OUTP}
 # artic nf
 #nextflow run connor-lab/ncov2019-artic-nf --help
 nextflow run connor-lab/ncov2019-artic-nf --illumina --prefix ${OUTP} --directory `pwd` --gff ${ANNO} --allowNoprimer true --illuminaKeepLen 35 --illuminaQualThreshold 20 --ivarFreqThreshold 0.9 --ivarMinDepth 20 --ivarMinFreqThreshold 0.15 --ivarMinVariantQuality 20 --yaml ${YML}
+rm ${OUTP}_S1_L001_R1_001.fastq.gz ${OUTP}_S1_L001_R2_001.fastq.gz
