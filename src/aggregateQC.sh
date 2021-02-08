@@ -26,4 +26,4 @@ mv ${OUTP}.aggr.qc.tmp ${OUTP}.aggr.qc.tsv
 
 # Helpers
 #head -n 1 ${OUTP}.aggr.qc.tsv | tr '\t' '\n' | awk '{print NR"\t"$1;}'
-cut -f 1,2,3,7,10,21,23,24,25,26,29,30,36,38 ${OUTP}.aggr.qc.tsv > ${OUTP}.aggr.qc.sub.tsv
+cut -f 7,16,18,19,22,23,24,25,26,32,33,34,37 ${OUTP}.aggr.qc.tsv > ${OUTP}.aggr.qc.sub.tsv

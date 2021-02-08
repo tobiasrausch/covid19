@@ -6,7 +6,6 @@ import argparse
 import collections
 import os
 import json
-import cyvcf2
 
 # Parse command line
 parser = argparse.ArgumentParser(description='Aggregate QC statistics')
@@ -109,39 +108,29 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
 filep = args.prefix + ".mutation.csv"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
     f_reader = csv.reader(open(filep), delimiter=",")
-    nline = 0
+    header = None
     for fields in f_reader:
-        if nline == 1:
-            ct = collections.Counter(fields)
-            qc['#CovDropoutsKeyMutations'] = ct['X']
-            qc['MutationString'] = ','.join(fields)
-        nline += 1
-
-# Variants
-filep = args.prefix + ".bcf"
-if (os.path.exists(filep)) and (os.path.isfile(filep)):
-    vcf = cyvcf2.VCF(filep)
-    ncount = 0
-    indels = False
-    mtct = collections.Counter()
-    for record in vcf:
-        mt = record.REF + ">" + record.ALT[0]
-        if len(mt) != 3:
-            indels = True
-        mtct[mt] += 1
-        ncount += 1
-    qc['MutationTypes'] = json.dumps(mtct).replace(' ', '')
-    qc['#CalledVariants'] = ncount
-    qc['InDelMutationsPresent'] = indels
+        if header is None:
+            header = fields
+            continue
+        strout = []
+        for (k, v) in zip(header[1:], fields[1:]):
+            strout.append(k + ":" + v)
+        qc['S_Typing'] = ','.join(strout)
 
 # Parse variants tsv file
 filep = args.prefix + ".variants.tsv"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
     f_reader = csv.DictReader(open(filep), delimiter="\t")
-    varct = collections.Counter()
+    varsetS = set()
     for fields in f_reader:
-        varct[fields['Consequence']] += 1
-    qc['Consequence'] = json.dumps(varct).replace(' ', '')
+        if ('IMPACT' in fields.keys()) and ('SYMBOL' in fields.keys()):
+            if (fields['IMPACT'] == 'MODERATE') or (fields['IMPACT'] == 'HIGH'):
+                aa = fields['Amino_acids'].split('/')
+                if len(aa) == 2:
+                    if fields['SYMBOL'] == 'S':
+                        varsetS.add(aa[0] + str(fields['Protein_position']) + aa[1])
+    qc['S_Variants'] = ','.join(varsetS)           
 
 # Consensus composition
 filep = args.prefix + ".cons.fa"
@@ -247,6 +236,9 @@ elif (qc['PangolinStatus'] == 'passed_qc') or (ncstatus == 'good'):
     qc['outcome'] = "borderline"
 else:
     qc['outcome'] = "fail"
+
+
+# Check percent identity, median coverage and percent ACGT
 if qc['outcome'] == "pass":
     qc['outcome'] = "borderline"
     if float(qc['PercIdentity'][:-1]) >= 90:

@@ -18,14 +18,14 @@ OUTP=${2}
 REF=${BASEDIR}/../ref/NC_045512.2.fa
 THREADS=4
 
-# Consensus
-samtools mpileup -aa -A -d 0 -B -Q 0 ${BAM} | ivar consensus -t 0.9 -m 20 -n N -p ${OUTP}.cons
+# Consensus (lenient)
+samtools mpileup -aa -A -d 0 -B -Q 0 ${BAM} | ivar consensus -t 0.7 -m 10 -n N -p ${OUTP}.cons
+
+# Consensus (strict)
+#samtools mpileup -aa -A -d 0 -B -Q 0 ${BAM} | ivar consensus -t 0.9 -m 20 -n N -p ${OUTP}.cons
 
 # Fix header
 sed -i "s/^>.*$/>${OUTP}/" ${OUTP}.cons.fa
-
-# Nucleotide composition
-tail -n +2 ${OUTP}.cons.fa | sed 's/\(.\)/\1\n/g' | grep "." | sort | uniq -c > ${OUTP}.cons.comp
 
 # consensus computation using freebayes variants
 cat ${REF} | bcftools consensus ${OUTP}.bcf | sed -e "s/^>.*$/>${OUTP}/" > ${OUTP}.fbvar.fa
@@ -35,7 +35,7 @@ samtools index ${OUTP}.fb.bam
 
 # mask low coverage as N
 head -n 1 ${OUTP}.cons.fa > ${OUTP}.fb.fa
-paste <(tail -n +2 ${OUTP}.fbvar.fa | sed 's/\(.\)/\1\n/g' | grep ".") <(samtools depth -aa -q 20 -d 0 ${OUTP}.fb.bam) | awk '{if ($4<20) {print "N"} else {print $1;} }'  | tr -d '\n' | awk '{print $0;}' >> ${OUTP}.fb.fa
+paste <(tail -n +2 ${OUTP}.fbvar.fa | sed 's/\(.\)/\1\n/g' | grep ".") <(samtools depth -aa -q 20 -d 0 ${OUTP}.fb.bam) | awk '{if ($4<10) {print "N"} else {print $1;} }'  | tr -d '\n' | awk '{print $0;}' >> ${OUTP}.fb.fa
 rm ${OUTP}.fbvar.fa* ${OUTP}.fb.bam ${OUTP}.fb.bam.bai
 
 # Compute diff of FreeBayes to iVar consensus
