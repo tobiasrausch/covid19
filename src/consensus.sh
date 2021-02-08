@@ -29,6 +29,6 @@ cat ${REF} | bcftools consensus ${OUTP}.bcf | sed -e "s/^>.*$/>${OUTP}/" > ${OUT
 
 # Replace ambiguous codes, align both consensus sequences and compute diff (ignoring Ns)
 cat ${OUTP}.cons.fa | tr 'RYSWKMBDHV' 'NNNNNNNNNN' > ${OUTP}.in.fasta
-alfred pwalign -f v -a ${OUTP}.align.fa.gz -g -4 -e -2 -m 5 -n -4 ${OUTP}.in.fasta ${OUTP}.fb.fa
-zcat ${OUTP}.align.fa.gz | sed 's/^\(.\)/\1 /' | awk '{print NR"\t"$1"\t"$2"\t"($1!=$2);}' | grep -P "[ACGT\-]\t[ACGT\-]\t1$" -C 5 > ${OUTP}.cons.diff
-rm ${OUTP}.align.fa.gz ${OUTP}.in.fasta
+alfred pwalign -f v -a ${OUTP}.vert.gz -g -4 -e -2 -m 5 -n -4 ${OUTP}.in.fasta ${OUTP}.fb.fa
+zcat ${OUTP}.vert.gz | sed 's/^\(.\)/\1 /' | awk '{print NR"\t"$1"\t"$2"\t"($1!=$2);}' | grep -P "[ACGT\-]\t[ACGT\-]\t1$" -C 5 > ${OUTP}.cons.diff
+rm ${OUTP}.vert.gz ${OUTP}.in.fasta
