@@ -153,6 +153,7 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
             qc['iVarFreeBayesDiff'] = False
 
 # Parse pangolin lineage
+qc['PangolinStatus'] = None
 filep = args.prefix + ".lineage.csv"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
     f_reader = csv.DictReader(open(filep), delimiter=",")
@@ -187,16 +188,17 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
                 break
 
 # Determine success/borderline/fail for this sample
-qc['outcome'] = "fail"
-ncstatus = 'good'
-if qc['NextcladeStatus'] is not None:
-    ncstatus = qc['NextcladeStatus']
-if (qc['PangolinStatus'] == 'passed_qc') and (ncstatus == 'good'):
-    qc['outcome'] = "pass"
-elif (qc['PangolinStatus'] == 'passed_qc') or (ncstatus == 'good'):
-    qc['outcome'] = "borderline"
+qc['outcome'] = "pass"
+if (qc['NextcladeStatus'] is not None) and (qc['PangolinStatus'] is not None):
+    if (qc['PangolinStatus'] == 'passed_qc') and (qc['NextcladeStatus'] == 'good'):
+        qc['outcome'] = "pass"
+    elif (qc['PangolinStatus'] == 'passed_qc') and (qc['NextcladeStatus'] == 'mediocre'):
+        qc['outcome'] = "borderline"
+    else:
+        qc['outcome'] = "fail"
 else:
-    qc['outcome'] = "fail"
+    if qc['#ConsensusNs'] > 5000:
+        qc['outcome'] = "fail"
 
 # Check percent identity, median coverage and percent ACGT
 if qc['outcome'] == "pass":
@@ -206,7 +208,7 @@ if qc['outcome'] == "pass":
             if float(qc['MedianCoverage']) >= 100:
                 if float(qc['PercACGT'][:-1]) >= 90:
                     qc['outcome'] = "pass"
-            
+
 # Output QC dictionary
 for key in sorted(qc.keys()):
     print(key, qc[key])
