@@ -25,29 +25,17 @@ for rn in ["1", "2"]:
                     qc['AdaptersRead' + rn] = line[(line.find('(')+1):line.find(')')]
 
 # Host reads (GRCh38 mapping)
+allreads = None
 filep = args.prefix + ".host.reads"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
     with open(filep) as f:
-        allreads = None
         grch38reads = None
         for line in f:
             if line.strip().endswith(".all.reads"):
                 allreads = int(line.strip().split(' ')[0])
             if line.strip().endswith(".remove.reads"):
                 grch38reads = int(line.strip().split(' ')[0])
-        qc['#ReadPairs'] = allreads
         qc['PercHuman'] = str(round(float(grch38reads) / float(allreads) * 100, 2)) + "%"
-
-# Host reads (kraken2 human DB)
-kraken2addreads = 0
-filep = args.prefix + ".kraken2.report.txt"
-if (os.path.exists(filep)) and (os.path.isfile(filep)):
-    with open(filep) as f:
-        for line in f:
-            if line.strip().endswith("Homo sapiens"):
-                fields = ' '.join(line.split()).split(' ')
-                kraken2addreads = fields[2]
-qc['Kraken2AddHumanReads'] = kraken2addreads
 
 # SARS-CoV-2 reads
 filep = args.prefix + ".srt.bam.flagstat"
@@ -71,11 +59,6 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
                 else:
                     records = line.strip().split('\t')
                     qc['FractionUnmapped'] = records[columns.index('UnmappedFraction')]
-                    qc['FractionSupplementaryAlignments'] = records[columns.index('SupplementaryAlignmentFraction')]
-                    qc['FractionMismatch'] = records[columns.index('MismatchRate')]
-                    qc['FractionInsertion'] = records[columns.index('InsertionRate')]
-                    qc['FractionDeletion'] = records[columns.index('DeletionRate')]
-                    qc['FractionSoftClip'] = records[columns.index('SoftClipRate')]
                     qc['FractionSequencingErrors'] = records[columns.index('ErrorRate')]
                     qc['MedianCoverage'] = records[columns.index('MedianCoverage')]
                     qc['SDCoverage'] = records[columns.index('SDCoverage')]
@@ -90,20 +73,6 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
                 aliscore = int(line.strip().replace("Alignment score: ",""))
                 qc['PercIdentity'] = str(round(float(aliscore) / float(29903) * 100, 2)) + "%"
                     
-# Coverage
-filep = args.prefix + ".depth"
-if (os.path.exists(filep)) and (os.path.isfile(filep)):
-    f_reader = csv.reader(open(filep), delimiter="\t")
-    npos = 0
-    zerocov = 0
-    for fields in f_reader:
-        cov = int(fields[2])
-        if cov == 0:
-            zerocov += 1
-        npos += 1
-    qc['#CoverageEqual0'] = zerocov
-    qc['ReferenceLength'] = npos
-
 # Mutation file
 filep = args.prefix + ".mutation.csv"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
@@ -122,15 +91,17 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
 filep = args.prefix + ".variants.tsv"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
     f_reader = csv.DictReader(open(filep), delimiter="\t")
-    varsetS = set()
+    varsetS = []
     for fields in f_reader:
         if ('IMPACT' in fields.keys()) and ('SYMBOL' in fields.keys()):
             if (fields['IMPACT'] == 'MODERATE') or (fields['IMPACT'] == 'HIGH'):
                 aa = fields['Amino_acids'].split('/')
                 if len(aa) == 2:
                     if fields['SYMBOL'] == 'S':
-                        varsetS.add(aa[0] + str(fields['Protein_position']) + aa[1])
-    qc['S_Variants'] = ','.join(varsetS)           
+                        aachange = aa[0] + str(fields['Protein_position']) + aa[1]
+                        if aachange not in varsetS:
+                            varsetS.append(aachange)
+    qc['S_Variants'] = ','.join(varsetS)
 
 # Consensus composition
 filep = args.prefix + ".cons.fa"
@@ -172,24 +143,13 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
 filep = args.prefix + ".cons.diff"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
     with open(filep) as f:
-        diffct = 0
-        ivarct = 0
-        freect = 0
+        lcount = 0
         for line in f:
-            if line.startswith('<'):
-                ivarct += 1
-            elif line.startswith('>'):
-                freect += 1
-            if line.startswith('<'):
-                fields = ' '.join(line.split()).split(' ')
-                # Any diff for non-N and non-ambiguous
-                if fields[1] not in ["R", "Y", "S", "W", "K", "M", "B", "D", "H", "V", "N"]:
-                    diffct += 1
-        absdiff = abs(ivarct - freect)
-        if diffct > absdiff:
-            qc['iVarFreeBayesDiff'] = diffct
+            lcount += 1
+        if lcount > 0
+            qc['iVarFreeBayesDiff'] = True
         else:
-            qc['iVarFreeBayesDiff'] = absdiff
+            qc['iVarFreeBayesDiff'] = False
 
 # Parse pangolin lineage
 filep = args.prefix + ".lineage.csv"
