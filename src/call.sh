@@ -29,7 +29,7 @@ bcftools norm -f ${REF} -O b -o ${OUTP}.norm.bcf ${OUTP}.vcf.gz
 rm ${OUTP}.vcf.gz ${OUTP}.vcf.gz.tbi
 
 # filter on quality and depth
-bcftools filter -i 'QUAL>20 && INFO/DP>=10 && INFO/SAF>=5 && INFO/SAR>=5' -O b -o ${OUTP}.filtered.bcf ${OUTP}.norm.bcf
+bcftools filter -i 'QUAL>20 && INFO/DP>=5 && INFO/SAF>=2 && INFO/SAR>=2' -O b -o ${OUTP}.filtered.bcf ${OUTP}.norm.bcf
 bcftools index ${OUTP}.filtered.bcf
 rm ${OUTP}.norm.bcf 
 
