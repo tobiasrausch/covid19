@@ -40,6 +40,12 @@ The main output files are:
 
 * The summary QC report: `ls <unique_sample_id>.qc.summary`
 
+## Aggregating results
+
+The above pipeline generates a report for every sample. It can be naively parallelized on the sample level. You can then aggregate all the QC information and the lineage & clade assignments using
+
+`./src/aggregate.sh outtable */*.qc.summary`
+
 ## Example
 
 The repository contains an example script using a [COG-UK](https://www.cogconsortium.uk/) data set.
