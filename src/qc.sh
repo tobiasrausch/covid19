@@ -30,6 +30,4 @@ then
 fi
 
 # Compute summary QC table
-gunzip ${OUTP}.alfred.tsv.gz
 python ${BASEDIR}/qc.py -p ${OUTP} > ${OUTP}.qc.summary
-gzip ${OUTP}.alfred.tsv

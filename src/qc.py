@@ -6,6 +6,7 @@ import argparse
 import collections
 import os
 import json
+import gzip
 
 # Parse command line
 parser = argparse.ArgumentParser(description='Aggregate QC statistics')
@@ -48,11 +49,11 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
                 qc['PercSars'] = str(round(float(sarsreads) / float(allreads) * 100, 2)) + "%"
 
 # Parse alignment statistics
-filep = args.prefix + ".alfred.tsv"
+filep = args.prefix + ".alfred.tsv.gz"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
-    with open(filep) as f:
+    with gzip.open(filep, "rb") as f:
         columns = None
-        for line in f:
+        for line in f.read().decode("ascii").splitlines():
             if line.startswith("ME"):
                 if columns is None:
                     columns = line.strip().split('\t')
@@ -146,7 +147,7 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
         lcount = 0
         for line in f:
             lcount += 1
-        if lcount > 0
+        if lcount > 0:
             qc['iVarFreeBayesDiff'] = True
         else:
             qc['iVarFreeBayesDiff'] = False
@@ -196,7 +197,6 @@ elif (qc['PangolinStatus'] == 'passed_qc') or (ncstatus == 'good'):
     qc['outcome'] = "borderline"
 else:
     qc['outcome'] = "fail"
-
 
 # Check percent identity, median coverage and percent ACGT
 if qc['outcome'] == "pass":
