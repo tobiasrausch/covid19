@@ -23,7 +23,3 @@ do
 done
 cat ${OUTP}.aggr.qc.tsv | sort -r | uniq > ${OUTP}.aggr.qc.tmp
 mv ${OUTP}.aggr.qc.tmp ${OUTP}.aggr.qc.tsv
-
-# Helpers
-#head -n 1 ${OUTP}.aggr.qc.tsv | tr '\t' '\n' | awk '{print NR"\t"$1;}'
-cut -f 7,16,18,19,22,23,24,25,26,32,33,34,37 ${OUTP}.aggr.qc.tsv > ${OUTP}.aggr.qc.sub.tsv

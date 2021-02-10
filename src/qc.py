@@ -59,8 +59,8 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
                     columns = line.strip().split('\t')
                 else:
                     records = line.strip().split('\t')
-                    qc['FractionUnmapped'] = records[columns.index('UnmappedFraction')]
-                    qc['FractionSequencingErrors'] = records[columns.index('ErrorRate')]
+                    qc['PercUnmapped'] = str(round(float(records[columns.index('UnmappedFraction')]) * 100, 2)) + "%"
+                    qc['PercSeqError'] = str(round(float(records[columns.index('ErrorRate')]) * 100, 2)) + "%"
                     qc['MedianCoverage'] = records[columns.index('MedianCoverage')]
                     qc['SDCoverage'] = records[columns.index('SDCoverage')]
                     qc['MedianInsertSize'] = records[columns.index('MedianInsertSize')]
@@ -160,7 +160,6 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
     for fields in f_reader:
         qc['Lineage'] = fields['lineage']
         qc['PangolinStatus'] = fields['status']
-        qc['LineageProb'] = fields['probability']
 
 # Nextclade
 qc['NextcladeStatus'] = None
@@ -192,7 +191,7 @@ qc['outcome'] = "pass"
 if (qc['NextcladeStatus'] is not None) and (qc['PangolinStatus'] is not None):
     if (qc['PangolinStatus'] == 'passed_qc') and (qc['NextcladeStatus'] == 'good'):
         qc['outcome'] = "pass"
-    elif (qc['PangolinStatus'] == 'passed_qc') and (qc['NextcladeStatus'] == 'mediocre'):
+    elif (qc['PangolinStatus'] == 'passed_qc') and (qc['#ConsensusNs'] <= 5000):
         qc['outcome'] = "borderline"
     else:
         qc['outcome'] = "fail"
@@ -201,14 +200,14 @@ else:
         qc['outcome'] = "fail"
 
 # Check percent identity, median coverage and percent ACGT
-if qc['outcome'] == "pass":
-    qc['outcome'] = "borderline"
-    if float(qc['PercIdentity'][:-1]) >= 90:
-        if float(qc['PercN'][:-1]) <= 5:
-            if float(qc['MedianCoverage']) >= 100:
-                if float(qc['PercACGT'][:-1]) >= 90:
-                    qc['outcome'] = "pass"
+qc['rki'] = 'fail'
+if float(qc['PercIdentity'][:-1]) >= 90:
+    if float(qc['PercN'][:-1]) <= 5:
+        if float(qc['MedianCoverage']) >= 100:
+            if float(qc['PercACGT'][:-1]) >= 90:
+                qc['rki'] = "pass"
 
 # Output QC dictionary
-for key in sorted(qc.keys()):
-    print(key, qc[key])
+for key in ["Sample", "outcome", "rki", "Lineage", "Clade", "MedianCoverage", "#ConsensusAmbiguous", "#ConsensusNs", "PercACGT", "PercHuman", "PercIdentity", "PercN", "PercSars", "PercSeqError", "PercUnmapped", "S_Variants", "AdaptersRead1", "AdaptersRead2", "MedianInsertSize", "PrimerTrimmed", "PrimerTrimmedISizeIssue", "PrimerTrimmedTooShort", "SDCoverage", "VadrStatus", "NextcladeStatus", "PangolinStatus", "iVarFreeBayesDiff", "S_Typing"]:
+    if key in qc.keys():
+        print(key, qc[key])
