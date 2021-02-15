@@ -16,8 +16,14 @@ export PATH=${BASEDIR}/../conda/bin:${PATH}
 OUTP=${1}
 shift 1
 
+# Initialize
+for F in $@
+do
+    cat ${F} | cut -f 2 > ${OUTP}.depth
+    break
+done
+
 # Collect 0x positions
-rm -f ${OUTP}.depth
 for F in $@
 do
     QC=`echo ${F} | sed 's/.depth$/.qc.summary/'`
@@ -25,11 +31,16 @@ do
     then
 	if [ `grep -c "outcome pass" ${QC}` -eq 1 ]
 	then
-	    echo ${F}
-	    # 0x
-	    #cat ${F} | awk '$3==0' | cut -f 2 >> ${OUTP}.depth
-	    # <10x
-	    cat ${F} | awk '$3<10' | cut -f 2 >> ${OUTP}.depth
+	    # Stratify further if needed
+	    VAR=`echo ${F} | sed 's/.depth$/.variants.tsv/'`
+	    if [ `grep -c -P "22879\tC\tA" ${VAR}` -eq 1 ]
+	    then
+		echo ${F}
+		# 0x
+		#cat ${F} | awk '$3==0' | cut -f 2 >> ${OUTP}.depth
+		# <10x
+		cat ${F} | awk '$3<10' | cut -f 2 >> ${OUTP}.depth
+	    fi
 	fi
     fi
 done
