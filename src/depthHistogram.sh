@@ -33,6 +33,7 @@ do
 	then
 	    # Stratify further if needed
 	    VAR=`echo ${F} | sed 's/.depth$/.variants.tsv/'`
+	    #if [ `grep -c "Lineage B.1.351" ${QC}` -eq 1 ]
 	    if [ `grep -c -P "22879\tC\tA" ${VAR}` -eq 1 ]
 	    then
 		echo ${F}
