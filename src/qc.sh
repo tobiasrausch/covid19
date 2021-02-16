@@ -21,12 +21,10 @@ THREADS=4
 # Alignment to SARS-CoV-2 reference
 if [ ! -f ${OUTP}.align.fa.gz ]
 then
-    # Trim leading and trailing Ns, replace IUPAC ambiguous characters with N
-    cat ${FASTA} | sed 's/^N*//' | sed 's/N*$//' | tr 'RYSWKMBDHV' 'NNNNNNNNNN' > ${OUTP}.in.fasta
-
-    # Alignment to the reference (end-gaps free in reference), score matches as 1 for percent identity
-    alfred pwalign -q -f h -a ${OUTP}.align.fa.gz -g 0 -e 0 -m 1 -n 0 ${REF} ${OUTP}.in.fasta > ${OUTP}.alistats
-    rm ${OUTP}.in.fasta
+    # Compute alignment to reference
+    alfred pwalign -k -f v -a ${OUTP}.align.gz -g -4 -e -2 -m 5 -n -4 ${REF} ${FASTA}
+    zcat ${OUTP}.align.gz | sed 's/^\(.\)/\1 /' | awk '{if ($1!="-") { P1+=1; }; if ($2!="-") {P2+=1;}; print P1"\t"P2"\t"$1"\t"$2"\t"($1!=$2);}' | gzip -c > ${OUTP}.align.fa.gz
+    rm ${OUTP}.align.gz
 fi
 
 # Compute summary QC table

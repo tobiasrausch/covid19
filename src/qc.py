@@ -66,14 +66,22 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
                     qc['MedianInsertSize'] = records[columns.index('MedianInsertSize')]
 
 # Percent identity to SARS-CoV-2 reference
-filep = args.prefix + ".alistats"
+filep = args.prefix + ".align.fa.gz"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
-    with open(filep) as f:
-        for line in f:
-            if line.startswith("Alignment score:"):
-                aliscore = int(line.strip().replace("Alignment score: ",""))
-                qc['PercIdentity'] = str(round(float(aliscore) / float(29903) * 100, 2)) + "%"
-                    
+    with gzip.open(filep, "rb") as f:
+        reflen = 0
+        seqlen = 0
+        nummatch = 0
+        for line in f.read().decode("ascii").splitlines():
+            columns = line.strip().split('\t')
+            if columns[2] != '-':
+                reflen += 1
+            if columns[3] != '-':
+                seqlen += 1
+                if columns[2] == columns[3]:
+                    nummatch += 1
+        qc['PercIdentity'] = str(round(float(nummatch) / float(reflen) * 100, 2)) + "%"
+
 # Mutation file
 filep = args.prefix + ".mutation.csv"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
