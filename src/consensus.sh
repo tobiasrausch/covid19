@@ -27,8 +27,7 @@ sed -i "s/^>.*$/>${OUTP}/" ${OUTP}.cons.fa
 # Consensus computation using freebayes variants (lenient)
 cat ${REF} | bcftools consensus ${OUTP}.bcf | sed -e "s/^>.*$/>${OUTP}/" > ${OUTP}.fb.fa
 
-# Replace ambiguous codes, align both consensus sequences and compute diff (ignoring Ns)
-cat ${OUTP}.cons.fa | tr 'RYSWKMBDHV' 'NNNNNNNNNN' > ${OUTP}.in.fasta
-alfred pwalign -f v -a ${OUTP}.vert.gz -g -4 -e -2 -m 5 -n -4 ${OUTP}.in.fasta ${OUTP}.fb.fa
-zcat ${OUTP}.vert.gz | sed 's/^\(.\)/\1 /' | awk '{print NR"\t"$1"\t"$2"\t"($1!=$2);}' | grep -P "[ACGT\-]\t[ACGT\-]\t1$" -C 5 > ${OUTP}.cons.diff
-rm ${OUTP}.vert.gz ${OUTP}.in.fasta
+# Align both consensus sequences
+alfred pwalign -k -f v -a ${OUTP}.vert.gz -g -4 -e -2 -m 5 -n -4 ${OUTP}.cons.fa ${OUTP}.fb.fa
+zcat ${OUTP}.vert.gz | sed 's/^\(.\)/\1 /' | awk '{if ($1!="-") { P1+=1; }; if ($2!="-") {P2+=1;}; print P1"\t"P2"\t"$1"\t"$2"\t"($1!=$2);}' | gzip -c > ${OUTP}.cons.diff.gz
+rm ${OUTP}.vert.gz ${OUTP}.fb.fa

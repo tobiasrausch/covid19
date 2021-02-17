@@ -149,16 +149,38 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
                 qc['PrimerTrimmedISizeIssue'] = fields[0]
 
 # Freebayes & iVar diff
-filep = args.prefix + ".cons.diff"
+filep = args.prefix + ".cons.diff.gz"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
-    with open(filep) as f:
-        lcount = 0
-        for line in f:
-            lcount += 1
-        if lcount > 0:
-            qc['iVarFreeBayesDiff'] = True
-        else:
-            qc['iVarFreeBayesDiff'] = False
+    with gzip.open(filep, "rb") as f:
+        ivardiff = 0
+        for line in f.read().decode("ascii").splitlines():
+            columns = line.strip().split('\t')
+            if columns[2] == columns[3]:
+                continue
+            if (columns[2] == 'N') and ((columns[3] == 'A') or (columns[3] == 'C') or (columns[3] == 'G') or (columns[3] == 'T') or (columns[3] == '-')):
+                continue
+            if (columns[2] == 'R') and ((columns[3] == 'A') or (columns[3] == 'G')):
+                continue
+            if (columns[2] == 'Y') and ((columns[3] == 'C') or (columns[3] == 'T')):
+                continue
+            if (columns[2] == 'S') and ((columns[3] == 'C') or (columns[3] == 'G')):
+                continue
+            if (columns[2] == 'W') and ((columns[3] == 'A') or (columns[3] == 'T')):
+                continue
+            if (columns[2] == 'K') and ((columns[3] == 'G') or (columns[3] == 'T')):
+                continue
+            if (columns[2] == 'M') and ((columns[3] == 'A') or (columns[3] == 'C')):
+                continue
+            if (columns[2] == 'V') and ((columns[3] == 'A') or (columns[3] == 'C') or (columns[3] == 'G')):
+                continue
+            if (columns[2] == 'H') and ((columns[3] == 'A') or (columns[3] == 'C') or (columns[3] == 'T')):
+                continue
+            if (columns[2] == 'D') and ((columns[3] == 'A') or (columns[3] == 'G') or (columns[3] == 'T')):
+                continue
+            if (columns[2] == 'B') and ((columns[3] == 'C') or (columns[3] == 'G') or (columns[3] == 'T')):
+                continue
+            ivardiff += 1
+        qc['iVarFreeBayesDiff'] = ivardiff
 
 # Parse pangolin lineage
 qc['PangolinStatus'] = None
