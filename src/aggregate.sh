@@ -24,5 +24,3 @@ done
 cat ${OUTP}.aggr.qc.tsv | sort -r | uniq > ${OUTP}.aggr.qc.tmp
 mv ${OUTP}.aggr.qc.tmp ${OUTP}.aggr.qc.tsv
 
-# Remove controls
-cat ${OUTP}.aggr.qc.tsv | egrep -v "Internal|RNA|control|ctrl" > ${OUTP}.aggr.qc.sub.tsv 

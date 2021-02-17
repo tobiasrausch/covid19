@@ -94,23 +94,28 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
         strout = []
         for (k, v) in zip(header[1:], fields[1:]):
             strout.append(k + ":" + v)
-        qc['S_Typing'] = ','.join(strout)
+        qc['Typing_S'] = ','.join(strout)
 
 # Parse variants tsv file
 filep = args.prefix + ".variants.tsv"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
     f_reader = csv.DictReader(open(filep), delimiter="\t")
     varsetS = []
+    vartot = []
     for fields in f_reader:
         if ('IMPACT' in fields.keys()) and ('SYMBOL' in fields.keys()):
             if (fields['IMPACT'] == 'MODERATE') or (fields['IMPACT'] == 'HIGH'):
                 aa = fields['Amino_acids'].split('/')
                 if len(aa) == 2:
+                    aachange = aa[0] + str(fields['Protein_position']) + aa[1]
                     if fields['SYMBOL'] == 'S':
-                        aachange = aa[0] + str(fields['Protein_position']) + aa[1]
                         if aachange not in varsetS:
                             varsetS.append(aachange)
-    qc['S_Variants'] = ','.join(varsetS)
+                    aachange = fields['SYMBOL'] + ":" + aachange
+                    if aachange not in vartot:
+                        vartot.append(aachange)
+    qc['Mutations_S'] = ','.join(varsetS)
+    qc['Mutations'] = ','.join(vartot)
 
 # Consensus composition
 filep = args.prefix + ".cons.fa"
@@ -217,27 +222,27 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
                 break
 
 # Determine success/borderline/fail for this sample
-qc['outcome'] = "pass"
+qc['QC'] = "pass"
 if (qc['NextcladeStatus'] is not None) and (qc['PangolinStatus'] is not None):
     if (qc['PangolinStatus'] == 'passed_qc') and (qc['NextcladeStatus'] == 'good'):
-        qc['outcome'] = "pass"
+        qc['QC'] = "pass"
     elif (qc['PangolinStatus'] == 'passed_qc') and (qc['#ConsensusNs'] <= 5000):
-        qc['outcome'] = "borderline"
+        qc['QC'] = "borderline"
     else:
-        qc['outcome'] = "fail"
+        qc['QC'] = "fail"
 else:
     if qc['#ConsensusNs'] > 5000:
-        qc['outcome'] = "fail"
+        qc['QC'] = "fail"
 
 # Check percent identity, median coverage and percent ACGT
-qc['rki'] = 'fail'
+qc['RKI'] = 'fail'
 if float(qc['PercIdentity'][:-1]) >= 90:
     if float(qc['PercN'][:-1]) <= 5:
         if float(qc['MedianCoverage']) >= 100:
             if float(qc['PercACGT'][:-1]) >= 90:
-                qc['rki'] = "pass"
+                qc['RKI'] = "pass"
 
 # Output QC dictionary
-for key in ["Sample", "outcome", "rki", "Lineage", "Clade", "MedianCoverage", "#ConsensusAmbiguous", "#ConsensusNs", "PercACGT", "PercHuman", "PercIdentity", "PercN", "PercSars", "PercSeqError", "PercUnmapped", "S_Variants", "AdaptersRead1", "AdaptersRead2", "MedianInsertSize", "PrimerTrimmed", "PrimerTrimmedISizeIssue", "PrimerTrimmedTooShort", "SDCoverage", "VadrStatus", "NextcladeStatus", "PangolinStatus", "iVarFreeBayesDiff", "S_Typing"]:
+for key in ["Sample", "QC", "RKI", "Lineage", "Clade", "Mutations_S", "Mutations", "MedianCoverage", "#ConsensusAmbiguous", "#ConsensusNs", "PercACGT", "PercHuman", "PercIdentity", "PercN", "PercSars", "PercSeqError", "PercUnmapped", "AdaptersRead1", "AdaptersRead2", "MedianInsertSize", "PrimerTrimmed", "PrimerTrimmedISizeIssue", "PrimerTrimmedTooShort", "SDCoverage", "VadrStatus", "NextcladeStatus", "PangolinStatus", "iVarFreeBayesDiff", "Typing_S"]:
     if key in qc.keys():
         print(key, qc[key])
