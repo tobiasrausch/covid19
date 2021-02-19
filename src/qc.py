@@ -242,7 +242,20 @@ if float(qc['PercIdentity'][:-1]) >= 90:
             if float(qc['PercACGT'][:-1]) >= 90:
                 qc['RKI'] = "pass"
 
+# Assign simplified type
+qc['Type'] = None
+if qc ['RKI'] == "pass":
+    if qc['Lineage'] == "B.1.1.7":
+        qc['Type'] = "UK"
+    elif qc['Lineage'] == "B.1.351":
+        qc['Type'] = "ZA"
+    elif (qc['Lineage'] == "A") and ("N501Y" in qc['Mutations_S']) and (qc['Clade'] == "19B"):
+        qc['Type'] = "HD"
+    else:
+        qc['Type'] = "WT"
+
+
 # Output QC dictionary
-for key in ["Sample", "QC", "RKI", "Lineage", "Clade", "Mutations_S", "Mutations", "MedianCoverage", "#ConsensusAmbiguous", "#ConsensusNs", "PercACGT", "PercHuman", "PercIdentity", "PercN", "PercSars", "PercSeqError", "PercUnmapped", "AdaptersRead1", "AdaptersRead2", "MedianInsertSize", "PrimerTrimmed", "PrimerTrimmedISizeIssue", "PrimerTrimmedTooShort", "SDCoverage", "VadrStatus", "NextcladeStatus", "PangolinStatus", "iVarFreeBayesDiff", "Typing_S"]:
+for key in ["Sample", "QC", "RKI", "Lineage", "Clade", "Type", "Mutations_S", "Mutations", "MedianCoverage", "#ConsensusAmbiguous", "#ConsensusNs", "PercACGT", "PercHuman", "PercIdentity", "PercN", "PercSars", "PercSeqError", "PercUnmapped", "AdaptersRead1", "AdaptersRead2", "MedianInsertSize", "PrimerTrimmed", "PrimerTrimmedISizeIssue", "PrimerTrimmedTooShort", "SDCoverage", "VadrStatus", "NextcladeStatus", "PangolinStatus", "iVarFreeBayesDiff", "Typing_S"]:
     if key in qc.keys():
         print(key, qc[key])
