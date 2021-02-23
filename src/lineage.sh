@@ -38,7 +38,7 @@ then
 		docker rm nextclade
 	    fi
 	    # run nextclade container
-	    docker run -it --name nextclade --rm -u `id -u` --volume="${LP}/:/seq" neherlab/nextclade nextclade --input-fasta "/seq/${FASTA}" --output-json "/seq/${OUTP}.json"
+	    docker run -it --name nextclade --rm -u `id -u` --volume="${LP}/:/seq" nextstrain/nextclade nextclade --input-fasta "/seq/${FASTA}" --output-json "/seq/${OUTP}.json"
 	fi
 
 	# VADR: https://github.com/ncbi/vadr
