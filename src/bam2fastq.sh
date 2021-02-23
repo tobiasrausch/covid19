@@ -21,9 +21,5 @@ THREADS=4
 samtools sort -@ ${THREADS} -n ${BAM} -o ${OUTP}.tmp.bam
 
 # create paired-end files
-samtools fastq -@ ${THREADS} -1 ${OUTP}.R1.fastq.gz -2 ${OUTP}.R2.fastq.gz -0 /dev/null -s /dev/null -n ${OUTP}.tmp.bam
+samtools fastq -@ ${THREADS} -1 ${OUTP}.R1.fastq.gz -2 ${OUTP}.R2.fastq.gz -0 /dev/null -s ${OUTP}.fastq.gz -n ${OUTP}.tmp.bam
 rm ${OUTP}.tmp.bam
-
-# md5sums
-md5sum ${OUTP}.R1.fastq.gz > ${OUTP}.R1.fastq.gz.md5
-md5sum ${OUTP}.R2.fastq.gz > ${OUTP}.R2.fastq.gz.md5
