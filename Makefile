@@ -13,7 +13,7 @@ all:   	$(TARGETS)
 	export PATH=${PBASE}/conda/bin:${PATH} && conda config --add channels defaults && conda config --add channels conda-forge && conda config --add channels bioconda && touch .channels
 
 .install: .conda .channels
-	export PATH=${PBASE}/conda/bin:${PATH} && conda install -y samtools bcftools bedtools htslib bwa trim-galore fastqc delly kraken2 ivar alfred=0.2.3 seqtk freebayes mafft iqtree cyvcf2 scikit-learn && touch .install
+	export PATH=${PBASE}/conda/bin:${PATH} && conda install -y samtools bcftools bedtools htslib bwa trim-galore fastqc delly kraken2 ivar alfred=0.2.3 seqtk freebayes mafft iqtree cyvcf2 scikit-learn verifybamid && touch .install
 
 .check: .conda .channels .install
 	export PATH=${PBASE}/conda/bin:${PATH} && samtools --version && bcftools --version && bedtools --version && bgzip --version && tabix --version && trim_galore --version && delly --version && ivar version && touch .check
