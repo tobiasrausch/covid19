@@ -18,26 +18,29 @@ OUTP=${1}
 shift 1
 
 # Generate SNP sites with estimated AC/AN
-bcftools merge -0 --no-version $@ | bcftools view -m2 -M2 -v snps --min-ac 1 - | cut -f 1-8 | sed 's/^NC_045512.2/chr22/' | bgzip > ${OUTP}.vcf.gz
+bcftools merge -0 --no-version $@ | bcftools view -m2 -M2 -v snps --min-ac 1 - | cut -f 1-8 | bgzip > ${OUTP}.vcf.gz
 tabix ${OUTP}.vcf.gz
 
-# Estimate cross-contamination
+# Re-genotype
 NUM=1
-rm -f ${OUTP}.freemix.tsv
-echo "Cross-contamination..."
+echo "Genotyping..."
 for F in $@
 do
     BAM=`echo ${F} | sed 's/.bcf$/.srt.bam/'`
-    ID=`echo ${BAM} | sed 's/^.*\///' | sed 's/.srt.bam$//'`
     if [ -f ${BAM} ]
     then
-	samtools view -h ${BAM} | sed 's/NC_045512.2/chr22/' | samtools view -b - > ${OUTP}.tmp.${NUM}.bam
-	samtools index ${OUTP}.tmp.${NUM}.bam
-	verifyBamID --ignoreRG --chip-none --site --vcf ${OUTP}.vcf.gz --bam ${OUTP}.tmp.${NUM}.bam --noPhoneHome --maxDepth 1000 --precise --out ${OUTP}.contam.${NUM}
-	rm ${OUTP}.tmp.${NUM}.bam ${OUTP}.tmp.${NUM}.bam.bai
-	FREEMIX=`cut -f 7 ${OUTP}.contam.${NUM}.selfSM | tail -n 1`
-	echo -e "${ID}\t${FREEMIX}" >> ${OUTP}.freemix.tsv
-	rm ${OUTP}.contam.${NUM}.*
+	echo ${BAM}
+	freebayes -l -@ ${OUTP}.vcf.gz --ploidy 1 --report-genotype-likelihood-max --fasta-reference ${REF} --genotype-qualities -v ${OUTP}.geno.${NUM}.vcf ${BAM}
+	bgzip ${OUTP}.geno.${NUM}.vcf
+	tabix ${OUTP}.geno.${NUM}.vcf.gz
 	NUM=`expr ${NUM} + 1`
     fi
 done
+bcftools merge --no-version -O b -o ${OUTP}.bcf ${OUTP}.geno.*.vcf.gz
+bcftools index ${OUTP}.bcf
+rm ${OUTP}.geno.*.vcf.gz*
+rm ${OUTP}.vcf.gz ${OUTP}.vcf.gz.tbi
+
+# Quick contamination assessment
+python ${BASEDIR}/crosscontam.py -b ${OUTP}.bcf > ${OUTP}.tsv
+rm ${OUTP}.bcf ${OUTP}.bcf.csi

@@ -4,7 +4,7 @@ library(grid)
 library(scales)
 
 # Split by plate first
-# cat *.freemix.tsv | sed 's/\([A-H]\)\([0-9]*\)\t/\t\1\t\2\t/' > byplate.tsv
+# cat contam.tsv | sed 's/\([A-H]\)\([0-9]*\)\t/\t\1\t\2\t/' > byplate.tsv
 # Rscript ../scripts/contam.R byplate.tsv
 
 args = commandArgs(trailingOnly=TRUE)
