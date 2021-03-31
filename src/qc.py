@@ -251,6 +251,10 @@ if qc ['RKI'] == "pass":
         qc['Type'] = "ZA"
     elif (qc['Lineage'] == "A") and ("N501Y" in qc['Mutations_S']) and (qc['Clade'] == "19B"):
         qc['Type'] = "HD"
+    elif qc['Lineage'] == "P.2":
+        qc['Type'] = "P.2"
+    elif qc['Lineage'] == "P.3":
+        qc['Type'] = "P.3"
     else:
         qc['Type'] = "WT"
 
