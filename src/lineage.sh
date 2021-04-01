@@ -28,14 +28,16 @@ then
     if command -v docker &> /dev/null
     then
 	# run nextclade container
-	LP=`pwd`
+	cp ${FASTA} /tmp
 	if [ ! "$(docker ps -q -f name=nextclade)" ]; then
 	    if [ "$(docker ps -aq -f status=exited -f name=nextclade)" ]; then
 		# cleanup
 		docker rm nextclade
 	    fi
 	    # run nextclade container
-	    docker run -it --name nextclade --rm -u `id -u` --volume="${LP}/:/seq" nextstrain/nextclade nextclade --input-fasta "/seq/${FASTA}" --output-json "/seq/${OUTP}.json"
+	    docker run -it --name nextclade --rm -u `id -u` --volume="/tmp/:/seq" nextstrain/nextclade nextclade --input-fasta "/seq/${FASTA}" --output-json "/seq/${OUTP}.json"
+	    cp /tmp/${OUTP}.json .
+	    rm /tmp/${OUTP}.json
 	fi
 
 	# VADR: https://github.com/ncbi/vadr
@@ -45,10 +47,11 @@ then
 		docker rm vadr
 	    fi
 	    # run vadr container
-	    docker run -it --name vadr --rm -u `id -u` --volume="${LP}/:/data" staphb/vadr /opt/vadr/vadr/v-annotate.pl --mxsize 64000 -s -r --nomisc --mkey NC_045512 --lowsim5term 2 --lowsim3term 2 --fstlowthr 0.0 --alt_fail lowscore,fsthicnf,fstlocnf "/data/${FASTA}" ${OUTP}.out
-	    mv ${OUTP}.out/${OUTP}.out.vadr.pass.tbl .
-	    mv ${OUTP}.out/${OUTP}.out.vadr.fail.tbl .
-	    rm -rf ${OUTP}.out/
+	    docker run -it --name vadr --rm -u `id -u` --volume="/tmp/:/data" staphb/vadr /opt/vadr/vadr/v-annotate.pl --mxsize 64000 -s -r --nomisc --mkey NC_045512 --lowsim5term 2 --lowsim3term 2 --fstlowthr 0.0 --alt_fail lowscore,fsthicnf,fstlocnf "/data/${FASTA}" ${OUTP}.out
+	    cp /tmp/${OUTP}.out/${OUTP}.out.vadr.pass.tbl .
+	    cp /tmp/${OUTP}.out/${OUTP}.out.vadr.fail.tbl .
+	    rm -rf /tmp/${OUTP}.out/
 	fi
+	rm /tmp/${FASTA}
     fi
 fi
