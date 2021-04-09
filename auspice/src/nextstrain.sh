@@ -52,6 +52,18 @@ do
 	    elif [ ${KEY} == "division" ]
 	    then
 		OUTSTR=${OUTSTR}"\tRhineNeckar"
+	    elif [ ${KEY} == "region_exposure" ]
+	    then
+		OUTSTR=${OUTSTR}"\tEurope"
+	    elif [ ${KEY} == "country_exposure" ]
+	    then
+		OUTSTR=${OUTSTR}"\tGermany"
+	    elif [ ${KEY} == "division_exposure" ]
+	    then
+		OUTSTR=${OUTSTR}"\tRhineNeckar"
+	    elif [ ${KEY} == "location" ]
+	    then
+		OUTSTR=${OUTSTR}"\tRhineNeckar"
 	    elif [ ${KEY} == "segment" ]
 	    then
 		OUTSTR=${OUTSTR}"\tgenome"
@@ -60,7 +72,7 @@ do
 		OUTSTR=${OUTSTR}"\t"${LEN}
 	    elif [ ${KEY} == "host" ]
 	    then
-		OUTSTR=${OUTSTR}"\tHuman"
+		OUTSTR=${OUTSTR}"\tHomo sapiens"
 	    elif [ ${KEY} == "Nextstrain_clade" ]
 	    then
 		OUTSTR=${OUTSTR}"\t"${CLADE}
@@ -76,12 +88,16 @@ do
 	    elif [ ${KEY} == "date_submitted" ]
 	    then
 		OUTSTR=${OUTSTR}"\t"${DATE}
+	    elif [ ${KEY} == "date" ]
+	    then
+		OUTSTR=${OUTSTR}"\t"${DATE}
 	    else
+		
 		OUTSTR=${OUTSTR}"\t?"
 	    fi
 	done
-	#echo -e ${OUTSTR} >> ${BASEDIR}/../ncov/data/example_metadata.tsv
-	#cat ${F} >> ${BASEDIR}/../ncov/data/example_sequences.fasta
+	echo -e ${OUTSTR} >> ${BASEDIR}/../ncov/data/example_metadata.tsv
+	cat ${F} >> ${BASEDIR}/../ncov/data/example_sequences.fasta
     fi
 done
 
