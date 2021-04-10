@@ -20,7 +20,10 @@ THREADS=4
 
 # Compute MSA
 cat $@ | gzip -c > ${OUTP}.fa.gz
-mafft --auto --thread ${THREADS} --keeplength --nomemsave --addfragments <(zcat ${OUTP}.fa.gz) ${REF} > ${OUTP}.msa
+mafft --auto --thread ${THREADS} --keeplength --addfragments <(zcat ${OUTP}.fa.gz) ${REF} > ${OUTP}.msa
 
 # Phylogenetic inference
 iqtree -nt ${THREADS} -s ${OUTP}.msa
+
+# Plotting
+Rscript ${BASEDIR}/../scripts/phylogeny.R ${OUTP}.msa.treefile 
