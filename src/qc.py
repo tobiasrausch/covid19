@@ -240,7 +240,8 @@ if float(qc['PercIdentity'][:-1]) >= 90:
     if float(qc['PercN'][:-1]) <= 5:
         if float(qc['MedianCoverage']) >= 100:
             if float(qc['PercACGT'][:-1]) >= 90:
-                qc['RKI'] = "pass"
+                if qc['#ConsensusAmbiguous'] <= 25:
+                    qc['RKI'] = "pass"
 
 # Assign simplified type
 qc['Type'] = None
