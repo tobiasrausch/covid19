@@ -25,8 +25,9 @@ cat ${3} >> ${BASEDIR}/../ncov/data/example_metadata.tsv
 cat ${4} >> ${BASEDIR}/../ncov/data/example_sequences.fasta
 
 # Run ncov
+CPWD=`pwd`
 cd ${BASEDIR}/../ncov/
 rm -rf auspice benchmarks logs results
 export AUGUR_RECURSION_LIMIT=10000
 snakemake --cores 4 --profile ./my_profiles/getting_started
-
+cp ${BASEDIR}/../ncov/results/global/ncov_with_accessions.json ${CPWD}/${OUTP}.json
