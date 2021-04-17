@@ -46,6 +46,32 @@ The above pipeline generates a report for every sample. It can be naively parall
 
 `./src/aggregate.sh outtable */*.qc.summary`
 
+## Phylogeny
+
+You can build phylogenetic trees using
+
+`./src/phylogeny.sh outtree */*.cons.fa`
+
+You may only want to use this command on passed samples, i.e.:
+
+`./src/phylogeny.sh outtree `grep "RKI pass" */*.qc.summary | sed 's/.qc.summary.*$/.cons.fa/' | tr '\n' ' '`
+
+## Estimating cross-contamination
+
+You can estimate cross-contamination based on the allelic frequencies of variant calls using
+
+`./src/crosscontam.sh contam */*.bcf`
+
+This works best on good quality consensus sequences, i.e.:
+
+`./src/crosscontam.sh contam `grep "RKI pass" */*.qc.summary | sed 's/.qc.summary.*$/.bcf/' | tr '\n' ' '`
+
+## Integration with GISAID (unsupported)
+
+The repository also includes a basic script how to integrate viral sequences with background sequences from GISAID to generate a JSON file for [auspice](https://auspice.us/):
+
+`./auspice/src/nextstrain.sh`
+
 ## Example
 
 The repository contains an example script using a [COG-UK](https://www.cogconsortium.uk/) data set.
