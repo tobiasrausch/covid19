@@ -10,7 +10,7 @@ from readfq import readfq
 
 # Parse command line
 parser = argparse.ArgumentParser(description='FASTA/MSA filter tool')
-parser.add_argument('-m', '--msa', metavar='mafft.msa', required=True, dest='msa', help='MSA file (required)')
+parser.add_argument('-m', '--msa', metavar='mafft.msa', required=True, dest='msa', help='FASTA or MSA file (required)')
 parser.add_argument('-n', '--nperc', metavar='0.05', required=False, dest='nperc', help='max. fraction N (optional)')
 parser.add_argument('-g', '--gperc', metavar='0.5', required=False, dest='gperc', help='max. fraction gaps & Ns per column (optional)')
 parser.add_argument('-l', '--lperc', metavar='0.9', required=False, dest='lperc', help='min. fraction length (optional)')
