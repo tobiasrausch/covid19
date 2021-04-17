@@ -18,12 +18,25 @@ shift 1
 REF=${BASEDIR}/../ref/NC_045512.2.fa
 THREADS=4
 
-# Compute MSA
-cat $@ | gzip -c > ${OUTP}.fa.gz
-mafft --auto --thread ${THREADS} --keeplength --addfragments <(zcat ${OUTP}.fa.gz) ${REF} > ${OUTP}.msa
+# Concatenate FASTA
+cat $@ > ${OUTP}.fa
+
+# Filter sequences
+python ${BASEDIR}/../src/filter.py -d -m ${OUTP}.fa > ${OUTP}.filter.fa
+rm ${OUTP}.fa
+
+# Alignment
+mafft --auto --thread ${THREADS} --addfragments ${OUTP}.filter.fa ${REF} > ${OUTP}.align
+rm ${OUTP}.filter.fa
+
+# Filter alignment
+python ${BASEDIR}/../src/filter.py -d -m ${OUTP}.align > ${OUTP}.msa
+rm ${OUTP}.align
 
 # Phylogenetic inference
 iqtree -nt ${THREADS} -s ${OUTP}.msa
+# or: -m GTR+I+G
+# or: -B 1000 -alrt 1000
 
-# Plotting
+# Plotting or use FigTree
 Rscript ${BASEDIR}/../scripts/phylogeny.R ${OUTP}.msa.treefile 
