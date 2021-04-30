@@ -16,6 +16,7 @@ export PATH=${BASEDIR}/../conda/bin:${PATH}
 FASTA=${1}
 OUTP=${2}
 THREADS=4
+RUNVADR=0
 
 # Run pangolin
 if [ -f ${FASTA} ]
@@ -41,17 +42,23 @@ then
 	fi
 
 	# VADR: https://github.com/ncbi/vadr
-	if [ ! "$(docker ps -q -f name=vadr)" ]; then
-	    if [ "$(docker ps -aq -f status=exited -f name=vadr)" ]; then
-		# cleanup
-		docker rm vadr
+	if [ ${RUNVADR} -eq 1 ]
+	then
+	    if [ ! "$(docker ps -q -f name=vadr)" ]; then
+		if [ "$(docker ps -aq -f status=exited -f name=vadr)" ]; then
+		    # cleanup
+		    docker rm vadr
+		fi
+		# run vadr container
+		docker run -it --name vadr --rm -u `id -u` --volume="/tmp/:/data" staphb/vadr /opt/vadr/vadr/v-annotate.pl --mxsize 64000 -s -r --nomisc --mkey NC_045512 --lowsim5term 2 --lowsim3term 2 --fstlowthr 0.0 --alt_fail lowscore,fsthicnf,fstlocnf "/data/${FASTA}" ${OUTP}.out
+		cp /tmp/${OUTP}.out/${OUTP}.out.vadr.pass.tbl .
+		cp /tmp/${OUTP}.out/${OUTP}.out.vadr.fail.tbl .
+		rm -rf /tmp/${OUTP}.out/
 	    fi
-	    # run vadr container
-	    docker run -it --name vadr --rm -u `id -u` --volume="/tmp/:/data" staphb/vadr /opt/vadr/vadr/v-annotate.pl --mxsize 64000 -s -r --nomisc --mkey NC_045512 --lowsim5term 2 --lowsim3term 2 --fstlowthr 0.0 --alt_fail lowscore,fsthicnf,fstlocnf "/data/${FASTA}" ${OUTP}.out
-	    cp /tmp/${OUTP}.out/${OUTP}.out.vadr.pass.tbl .
-	    cp /tmp/${OUTP}.out/${OUTP}.out.vadr.fail.tbl .
-	    rm -rf /tmp/${OUTP}.out/
+	    rm /tmp/${FASTA}
+	else
+	    touch ${OUTP}.out.vadr.pass.tbl
+	    touch ${OUTP}.out.vadr.fail.tbl
 	fi
-	rm /tmp/${FASTA}
     fi
 fi
