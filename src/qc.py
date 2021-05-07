@@ -247,23 +247,23 @@ if float(qc['PercIdentity'][:-1]) >= 90:
 qc['Type'] = None
 if qc ['RKI'] == "pass":
     if qc['Lineage'] == "B.1.1.7":
-        qc['Type'] = "UK"
+        qc['Type'] = "B.1.1.7"
     elif qc['Lineage'] == "B.1.351":
-        qc['Type'] = "ZA"
+        qc['Type'] = "B.1.351"
     elif qc['Lineage'] == "A.27":
-        qc['Type'] = "HD"
+        qc['Type'] = "A.27"
     elif qc['Lineage'] == "P.2":
         qc['Type'] = "P.2"
     elif qc['Lineage'] == "P.3":
         qc['Type'] = "P.3"
     elif qc['Lineage'] == "B.1.617":
-        qc['Type'] = "IND"
+        qc['Type'] = "B.1.617"
     elif qc['Lineage'] == "B.1.617.1":
-        qc['Type'] = "IND"
+        qc['Type'] = "B.1.617.1"
     elif qc['Lineage'] == "B.1.617.2":
-        qc['Type'] = "IND"
+        qc['Type'] = "B.1.617.2"
     elif qc['Lineage'] == "B.1.617.3":
-        qc['Type'] = "IND"
+        qc['Type'] = "B.1.617.3"
     else:
         qc['Type'] = "WT"
 
