@@ -55,10 +55,10 @@ then
 		cp /tmp/${OUTP}.out/${OUTP}.out.vadr.fail.tbl .
 		rm -rf /tmp/${OUTP}.out/
 	    fi
-	    rm /tmp/${FASTA}
 	else
 	    touch ${OUTP}.out.vadr.pass.tbl
 	    touch ${OUTP}.out.vadr.fail.tbl
 	fi
+	rm /tmp/${FASTA}
     fi
 fi
