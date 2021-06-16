@@ -15,6 +15,7 @@ export PATH=${BASEDIR}/../conda/bin:${PATH}
 # Input parameters
 FASTA=${1}
 OUTP=${2}
+REF=${BASEDIR}/../ref/NC_045512.2.fa
 THREADS=4
 RUNVADR=0
 
@@ -30,15 +31,32 @@ then
     then
 	# run nextclade container
 	cp ${FASTA} /tmp
+	if [ ! -f /tmp/reference.fasta ]
+	then
+	    wget -O /tmp/reference.fasta https://raw.githubusercontent.com/nextstrain/nextclade/master/data/sars-cov-2/reference.fasta
+	fi
+	if [ ! -f /tmp/genemap.gff ]
+	then
+	    wget -O /tmp/genemap.gff https://raw.githubusercontent.com/nextstrain/nextclade/master/data/sars-cov-2/genemap.gff
+	fi
+	if [ ! -f /tmp/tree.json ]
+	then
+	    wget -O /tmp/tree.json https://raw.githubusercontent.com/nextstrain/nextclade/master/data/sars-cov-2/tree.json
+	fi
+	if [ ! -f /tmp/qc.json ]
+	then
+	    wget -O /tmp/qc.json https://raw.githubusercontent.com/nextstrain/nextclade/master/data/sars-cov-2/qc.json
+	fi
 	if [ ! "$(docker ps -q -f name=nextclade)" ]; then
 	    if [ "$(docker ps -aq -f status=exited -f name=nextclade)" ]; then
 		# cleanup
 		docker rm nextclade
 	    fi
 	    # run nextclade container
-	    docker run -it --name nextclade --rm -u `id -u` --volume="/tmp/:/seq" nextstrain/nextclade nextclade --input-fasta "/seq/${FASTA}" --output-json "/seq/${OUTP}.json"
+	    docker run -it --name nextclade --rm -u `id -u` --volume="/tmp/:/seq" nextstrain/nextclade nextclade --input-fasta "/seq/${FASTA}" --input-root-seq "/seq/reference.fasta" --input-tree "/seq/tree.json" --input-gene-map "/seq/genemap.gff" --input-qc-config "/seq/qc.json" --output-basename ${OUTP} --output-dir "/seq/" --output-json /seq/${OUTP}.json --output-tsv /seq/${OUTP}.tsv
 	    cp /tmp/${OUTP}.json .
-	    rm /tmp/${OUTP}.json
+	    cp /tmp/${OUTP}.tsv .
+	    rm /tmp/${OUTP}*
 	fi
 
 	# VADR: https://github.com/ncbi/vadr
@@ -59,6 +77,6 @@ then
 	    touch ${OUTP}.out.vadr.pass.tbl
 	    touch ${OUTP}.out.vadr.fail.tbl
 	fi
-	rm /tmp/${FASTA}
+	rm -f /tmp/${FASTA}
     fi
 fi

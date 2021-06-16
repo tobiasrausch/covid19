@@ -202,6 +202,7 @@ filep = args.prefix + ".json"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
     with open(filep) as json_file:
         data = json.load(json_file)
+        data = data['results']
         for p in data:
             if 'clade' in p.keys():
                 qc['Clade'] = p['clade']
