@@ -198,6 +198,7 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
 
 # Nextclade
 qc['NextcladeStatus'] = None
+qc['Clade'] = None
 filep = args.prefix + ".json"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
     with open(filep) as json_file:
@@ -206,8 +207,6 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
         for p in data:
             if 'clade' in p.keys():
                 qc['Clade'] = p['clade']
-            else:
-                qc['Clade'] = None
             if 'qc' in p.keys():
                 qc['NextcladeStatus'] = p['qc']['overallStatus']
 
