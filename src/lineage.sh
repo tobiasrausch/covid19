@@ -47,32 +47,28 @@ then
 	then
 	    wget -O /tmp/qc.json https://raw.githubusercontent.com/nextstrain/nextclade/master/data/sars-cov-2/qc.json
 	fi
-	if [ ! "$(docker ps -q -f name=nextclade)" ]; then
-	    if [ "$(docker ps -aq -f status=exited -f name=nextclade)" ]; then
-		# cleanup
-		docker rm nextclade
-	    fi
-	    # run nextclade container
-	    docker run -it --name nextclade --rm -u `id -u` --volume="/tmp/:/seq" nextstrain/nextclade nextclade --input-fasta "/seq/${FASTA}" --input-root-seq "/seq/reference.fasta" --input-tree "/seq/tree.json" --input-gene-map "/seq/genemap.gff" --input-qc-config "/seq/qc.json" --output-basename ${OUTP} --output-dir "/seq/" --output-json /seq/${OUTP}.json --output-tsv /seq/${OUTP}.tsv
-	    cp /tmp/${OUTP}.json .
-	    cp /tmp/${OUTP}.tsv .
-	    rm /tmp/${OUTP}*
+	if [ "$(docker ps -q -f name=nextclade)" ]
+	then
+	    docker rm -vf nextclade
+	    sleep 1
 	fi
+	docker run -it --name nextclade --rm -u `id -u` --volume="/tmp/:/seq" nextstrain/nextclade nextclade --input-fasta "/seq/${FASTA}" --input-root-seq "/seq/reference.fasta" --input-tree "/seq/tree.json" --input-gene-map "/seq/genemap.gff" --input-qc-config "/seq/qc.json" --output-basename ${OUTP} --output-dir "/seq/" --output-json /seq/${OUTP}.json --output-tsv /seq/${OUTP}.tsv
+	cp /tmp/${OUTP}.json .
+	cp /tmp/${OUTP}.tsv .
+	rm /tmp/${OUTP}*
 
 	# VADR: https://github.com/ncbi/vadr
 	if [ ${RUNVADR} -eq 1 ]
 	then
-	    if [ ! "$(docker ps -q -f name=vadr)" ]; then
-		if [ "$(docker ps -aq -f status=exited -f name=vadr)" ]; then
-		    # cleanup
-		    docker rm vadr
-		fi
-		# run vadr container
-		docker run -it --name vadr --rm -u `id -u` --volume="/tmp/:/data" staphb/vadr /opt/vadr/vadr/v-annotate.pl --mxsize 64000 -s -r --nomisc --mkey NC_045512 --lowsim5term 2 --lowsim3term 2 --fstlowthr 0.0 --alt_fail lowscore,fsthicnf,fstlocnf "/data/${FASTA}" ${OUTP}.out
-		cp /tmp/${OUTP}.out/${OUTP}.out.vadr.pass.tbl .
-		cp /tmp/${OUTP}.out/${OUTP}.out.vadr.fail.tbl .
-		rm -rf /tmp/${OUTP}.out/
+	    if [ "$(docker ps -q -f name=vadr)" ]
+	    then
+		docker rm -vf vadr
 	    fi
+	    # run vadr container
+	    docker run -it --name vadr --rm -u `id -u` --volume="/tmp/:/data" staphb/vadr /opt/vadr/vadr/v-annotate.pl --mxsize 64000 -s -r --nomisc --mkey NC_045512 --lowsim5term 2 --lowsim3term 2 --fstlowthr 0.0 --alt_fail lowscore,fsthicnf,fstlocnf "/data/${FASTA}" ${OUTP}.out
+	    cp /tmp/${OUTP}.out/${OUTP}.out.vadr.pass.tbl .
+	    cp /tmp/${OUTP}.out/${OUTP}.out.vadr.fail.tbl .
+	    rm -rf /tmp/${OUTP}.out/
 	else
 	    touch ${OUTP}.out.vadr.pass.tbl
 	    touch ${OUTP}.out.vadr.fail.tbl
