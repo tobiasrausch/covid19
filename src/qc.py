@@ -248,6 +248,8 @@ qc['Type'] = None
 if qc ['RKI'] == "pass":
     if qc['Lineage'] == "B.1.1.7":
         qc['Type'] = "B.1.1.7"
+    elif qc['Lineage'].startswith("Q."):
+        qc['Type'] = "B.1.1.7"
     elif qc['Lineage'] == "B.1.351":
         qc['Type'] = "B.1.351"
     elif qc['Lineage'] == "A.27":
@@ -265,6 +267,8 @@ if qc ['RKI'] == "pass":
     elif qc['Lineage'] == "B.1.617.1":
         qc['Type'] = "B.1.617.1"
     elif qc['Lineage'] == "B.1.617.2":
+        qc['Type'] = "B.1.617.2"
+    elif qc['Lineage'].startswith("AY."):
         qc['Type'] = "B.1.617.2"
     elif qc['Lineage'] == "B.1.617.3":
         qc['Type'] = "B.1.617.3"
