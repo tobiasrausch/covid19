@@ -25,6 +25,17 @@ bwa mem -R "@RG\tID:${OUTP}\tSM:${OUTP}" -t ${THREADS} ${REF} ${FQ1} ${FQ2} | sa
 samtools index ${OUTP}.srt.bam
 samtools flagstat ${OUTP}.srt.bam > ${OUTP}.srt.bam.flagstat
 
+# Guess amplicon design
+ARTICV3=`samtools view -c -F 3840 -q 10 -L ${BASEDIR}/../ref/nCoV-2019.primer.bed ${OUTP}.srt.bam`
+VARSKIP=`samtools view -c -F 3840 -q 10 -L ${BASEDIR}/../ref/neb_vss1a.primer.bed ${OUTP}.srt.bam`
+if [ ${VARSKIP} -gt ${ARTICV3} ]
+then
+    PRIMER=${BASEDIR}/../ref/neb_vss1a.primer.bed
+fi
+echo ${ARTICV3} "ARTIC v3" >> ${OUTP}.srt.bam.flagstat
+echo ${VARSKIP} "VarSkip" >> ${OUTP}.srt.bam.flagstat
+echo "Used" ${PRIMER} >> ${OUTP}.srt.bam.flagstat
+
 # Alignment QC
 alfred qc -r ${REF} -j ${OUTP}.alfred.json.gz -o ${OUTP}.alfred.tsv.gz ${OUTP}.srt.bam
 
