@@ -256,7 +256,7 @@ if qc ['RKI'] == "pass":
         qc['Type'] = "A.27"
     elif qc['Lineage'] == "P.1":
         qc['Type'] = "P.1"
-    elif qc['Lineage'] == "P.1.1":
+    elif qc['Lineage'].startswith("P.1."):
         qc['Type'] = "P.1"
     elif qc['Lineage'] == "P.2":
         qc['Type'] = "P.2"
