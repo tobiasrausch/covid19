@@ -252,6 +252,8 @@ if qc ['RKI'] == "pass":
         qc['Type'] = "B.1.1.7"
     elif qc['Lineage'] == "B.1.351":
         qc['Type'] = "B.1.351"
+    elif qc['Lineage'] == "B.1.1.529":
+        qc['Type'] = "B.1.1.529"
     elif qc['Lineage'] == "A.27":
         qc['Type'] = "A.27"
     elif qc['Lineage'] == "P.1":
