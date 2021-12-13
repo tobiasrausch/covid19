@@ -19,7 +19,7 @@ all:   	$(TARGETS)
 	export PATH=${PBASE}/conda/bin:${PATH} && samtools --version && bcftools --version && bedtools --version && bgzip --version && tabix --version && trim_galore --version && delly --version && ivar version && touch .check
 
 .pangolin: .conda .channels .install .check
-	export PATH=${PBASE}/conda/bin:${PATH} && wget https://github.com/cov-lineages/pangolin/archive/refs/tags/v3.1.16.tar.gz && tar -xzf v3.1.16.tar.gz && rm v3.1.16.tar.gz && mv pangolin-*/ pangolin && cd pangolin && conda env create -f environment.yml && source activate pangolin && pip install matplotlib scipy && pip install . && pangolin --update && pangolin -v && pangolin -pv && cd ../ && touch .pangolin
+	export PATH=${PBASE}/conda/bin:${PATH} && wget https://github.com/cov-lineages/pangolin/archive/refs/tags/v3.1.17.tar.gz && tar -xzf v3.1.17.tar.gz && rm v3.1.17.tar.gz && mv pangolin-*/ pangolin && cd pangolin && conda env create -f environment.yml && source activate pangolin && pip install matplotlib scipy && pip install . && pangolin --update && pangolin -v && pangolin -pv && cd ../ && touch .pangolin
 
 .llama: .conda .channels .install .check
 	export PATH=${PBASE}/conda/bin:${PATH} && git clone --recursive https://github.com/cov-lineages/llama.git && cd llama && conda env create -f environment.yml && source activate llama && python setup.py install && llama -v && cd ../ && touch .llama
