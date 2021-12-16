@@ -12,7 +12,7 @@ THREADS=12
 
 # Build human DB
 mkdir humanDB
-kraken2-build --download-library human --threads ${THREADS} --db humanDB
 kraken2-build --download-taxonomy --db humanDB
+kraken2-build --download-library human --threads ${THREADS} --db humanDB
 kraken2-build --build --threads ${THREADS} --db humanDB
 kraken2-build --clean --db humanDB
