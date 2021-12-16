@@ -3,11 +3,9 @@
 .conda
 .install
 .pangolin
-.llama
 conda/
 data/
 pangolin/
-llama/
 *~
 
 # python
