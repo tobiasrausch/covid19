@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 
 # Targets
-TARGETS = .conda .channels .install .check .pangolin .llama
+TARGETS = .conda .channels .install .check .pangolin
 PBASE=$(shell pwd)
 
 all:   	$(TARGETS)
@@ -22,4 +22,4 @@ all:   	$(TARGETS)
 	export PATH=${PBASE}/conda/bin:${PATH} && wget https://github.com/cov-lineages/pangolin/archive/refs/tags/v3.1.17.tar.gz && tar -xzf v3.1.17.tar.gz && rm v3.1.17.tar.gz && mv pangolin-*/ pangolin && cd pangolin && conda env create -f environment.yml && source activate pangolin && pip install matplotlib scipy && pip install . && pangolin --update && pangolin -v && pangolin -pv && cd ../ && touch .pangolin
 
 clean:
-	rm -rf $(TARGETS) $(TARGETS:=.o) conda/ pangolin/ llama/
+	rm -rf $(TARGETS) $(TARGETS:=.o) conda/ pangolin/
