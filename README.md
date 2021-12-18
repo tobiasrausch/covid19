@@ -48,13 +48,11 @@ The above pipeline generates a report for every sample. It can be naively parall
 
 ## Phylogeny
 
-You can build phylogenetic trees using
+Using [nextclade](https://clades.nextstrain.org/), you can build a phylogenetic tree with
 
-`./src/phylogeny.sh outtree */*.cons.fa`
+`./src/tree.sh sequences.fasta out
 
-You may only want to use this command on passed samples, i.e.:
-
-`./src/phylogeny.sh outtree `grep "RKI pass" */*.qc.summary | sed 's/.qc.summary.*$/.cons.fa/' | tr '\n' ' '`
+The out.tree.json file can be upload at [https://auspice.us](https://auspice.us).
 
 ## Estimating cross-contamination
 
