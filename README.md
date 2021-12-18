@@ -50,9 +50,9 @@ The above pipeline generates a report for every sample. It can be naively parall
 
 Using [nextclade](https://clades.nextstrain.org/), you can build a phylogenetic tree with
 
-`./src/tree.sh sequences.fasta out
+`./src/tree.sh sequences.fasta out`
 
-The out.tree.json file can be upload at [https://auspice.us](https://auspice.us).
+The `out.tree.json` file can be upload at [https://auspice.us](https://auspice.us).
 
 ## Estimating cross-contamination
 
