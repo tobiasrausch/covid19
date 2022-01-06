@@ -26,14 +26,25 @@ samtools index ${OUTP}.srt.bam
 samtools flagstat ${OUTP}.srt.bam > ${OUTP}.srt.bam.flagstat
 
 # Guess amplicon design
-ARTICV3=`samtools view -c -F 3840 -q 10 -L ${BASEDIR}/../ref/nCoV-2019.primer.bed ${OUTP}.srt.bam`
-VARSKIP=`samtools view -c -F 3840 -q 10 -L ${BASEDIR}/../ref/neb_vss1a.primer.bed ${OUTP}.srt.bam`
-if [ ${VARSKIP} -gt ${ARTICV3} ]
-then
-    PRIMER=${BASEDIR}/../ref/neb_vss1a.primer.bed
-fi
-echo ${ARTICV3} "ARTIC v3" >> ${OUTP}.srt.bam.flagstat
-echo ${VARSKIP} "VarSkip" >> ${OUTP}.srt.bam.flagstat
+BESTCOV=0
+cat ${BASEDIR}/../ref/*.primer.bed | cut -f 1-3 | sort | uniq -u > ${OUTP}.fetch
+for PRIN in nCoV-2019 neb_vss1a neb_vss2
+do
+    if [ -f ${BASEDIR}/../ref/${PRIN}.primer.bed ]
+    then
+	cat ${BASEDIR}/../ref/${PRIN}.primer.bed | grep -w -Ff ${OUTP}.fetch > ${OUTP}.${PRIN}.unique
+	TOTALLEN=`cat ${OUTP}.${PRIN}.unique | awk '{SUM+=$3-$2;} END {print SUM;}'`
+	COVPRIN=`samtools depth -a -d 0 -b ${OUTP}.${PRIN}.unique ${OUTP}.srt.bam | awk '{SUM+=$3;} END {print int(SUM/NR);}'`
+	echo -e "${PRIN}\t${COVPRIN}\t${TOTALLEN}" >> ${OUTP}.srt.bam.flagstat
+	if [ ${COVPRIN} -gt ${BESTCOV} ]
+	then
+	    PRIMER=${BASEDIR}/../ref/${PRIN}.primer.bed
+	    BESTCOV=${COVPRIN}
+	fi
+	rm ${OUTP}.${PRIN}.unique
+    fi
+done
+rm -f ${OUTP}.fetch
 echo "Used" ${PRIMER} >> ${OUTP}.srt.bam.flagstat
 
 # Alignment QC
