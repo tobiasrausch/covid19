@@ -41,7 +41,7 @@ if args.depth:
             invalidpos.add(pos)
 
 # VEP columns
-vepcols = ["Allele", "Consequence", "IMPACT", "SYMBOL", "Gene", "Feature_type", "Feature", "BIOTYPE", "EXON", "INTRON", "HGVSc", "HGVSp", "cDNA_position", "CDS_position", "Protein_position", "Amino_acids", "Codons", "Existing_variation", "DISTANCE", "STRAND", "FLAGS", "SYMBOL_SOURCE", "HGNC_ID", "MANE", "TSL", "APPRIS", "CLIN_SIG", "SOMATIC", "PHENO"]
+vepcols = ["Allele", "Consequence", "IMPACT", "SYMBOL", "Gene", "Feature_type", "Feature", "BIOTYPE", "EXON", "INTRON", "HGVSc", "HGVSp", "cDNA_position", "CDS_position", "Protein_position", "Amino_acids", "Codons", "Existing_variation", "DISTANCE", "STRAND", "FLAGS", "SYMBOL_SOURCE", "HGNC_ID", "CLIN_SIG", "SOMATIC", "PHENO"]
 descols = ["Consequence", "IMPACT", "SYMBOL", "Feature", "cDNA_position", "Protein_position", "Amino_acids", "Codons", "Existing_variation"]
 addr = dict()
 for idx, val in enumerate(vepcols):
