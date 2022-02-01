@@ -6,6 +6,10 @@ SARS-CoV-2 analysis pipeline for short-read, paired-end sequencing.
 
 A [Makefile](https://github.com/tobiasrausch/covid19/blob/main/Makefile) is part of the code that installs all dependencies using bioconda.
 
+`git clone --recursive https://github.com/tobiasrausch/covid19.git`
+
+`cd covid19`
+
 `make all`
 
 ## Preparing the reference databases and indexes
