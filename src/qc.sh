@@ -12,6 +12,8 @@ SCRIPT=$(readlink -f "$0")
 BASEDIR=$(dirname "$SCRIPT")
 export PATH=${BASEDIR}/../conda/bin:${PATH}
 
+source activate	covid19
+
 # Input parameters
 FASTA=${1}
 OUTP=${2}

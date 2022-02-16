@@ -12,6 +12,8 @@ SCRIPT=$(readlink -f "$0")
 BASEDIR=$(dirname "$SCRIPT")
 export PATH=${BASEDIR}/../conda/bin:${PATH}
 
+source activate	covid19
+
 # Input parameters
 FQ1=${1}
 FQ2=${2}
@@ -28,7 +30,7 @@ samtools flagstat ${OUTP}.srt.bam > ${OUTP}.srt.bam.flagstat
 # Guess amplicon design
 BESTCOV=0
 cat ${BASEDIR}/../ref/*.primer.bed | cut -f 1-3 | sort | uniq -u > ${OUTP}.fetch
-for PRIN in nCoV-2019 neb_vss1a neb_vss2
+for PRIN in nCoV-2019 neb_vss1a neb_vss2a
 do
     if [ -f ${BASEDIR}/../ref/${PRIN}.primer.bed ]
     then

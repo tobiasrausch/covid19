@@ -1,7 +1,7 @@
-.channels
+.tools
 .check
 .conda
-.install
+.mamba
 .pangolin
 conda/
 data/
