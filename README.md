@@ -50,14 +50,6 @@ The above pipeline generates a report for every sample. It can be naively parall
 
 `./src/aggregate.sh outtable */*.qc.summary`
 
-## Phylogeny
-
-Using [nextclade](https://clades.nextstrain.org/), you can build a phylogenetic tree with
-
-`./src/tree.sh sequences.fasta out`
-
-The `out.tree.json` file can be upload at [https://auspice.us](https://auspice.us).
-
 ## Estimating cross-contamination
 
 You can estimate cross-contamination based on the allelic frequencies of variant calls using
