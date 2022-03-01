@@ -189,12 +189,14 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
 
 # Parse pangolin lineage
 qc['PangolinStatus'] = None
+qc['scorpio_call'] = None
 filep = args.prefix + ".lineage.csv"
 if (os.path.exists(filep)) and (os.path.isfile(filep)):
     f_reader = csv.DictReader(open(filep), delimiter=",")
     for fields in f_reader:
         qc['Lineage'] = fields['lineage']
         qc['PangolinStatus'] = fields['status']
+        qc['scorpio_call'] = fields['scorpio_call']
 
 # Nextclade
 qc['NextcladeStatus'] = None
@@ -277,7 +279,10 @@ if qc ['RKI'] == "pass":
     elif qc['Lineage'] == "B.1.617.3":
         qc['Type'] = "B.1.617.3"
     elif qc['Lineage'] == "None":
-        qc['Type'] = "None"
+        if qc['scorpio_call'].startswith("Omicron"):
+            qc['Type'] = "B.1.1.529"
+        else:
+            qc['Type'] = "None"
     else:
         qc['Type'] = "WT"
 
