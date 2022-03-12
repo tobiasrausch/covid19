@@ -36,7 +36,10 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
                 allreads = int(line.strip().split(' ')[0])
             if line.strip().endswith(".remove.reads"):
                 grch38reads = int(line.strip().split(' ')[0])
-        qc['PercHuman'] = str(round(float(grch38reads) / float(allreads) * 100, 2)) + "%"
+        if allreads != 0:
+            qc['PercHuman'] = str(round(float(grch38reads) / float(allreads) * 100, 2)) + "%"
+        else:
+            qc['PercHuman'] = "0%"
 
 # SARS-CoV-2 reads
 filep = args.prefix + ".srt.bam.flagstat"
@@ -135,8 +138,12 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
         nuclen = ncount + dnacount + ambcount
         qc['#ConsensusNs'] = ncount
         qc['#ConsensusAmbiguous'] = ambcount
-        qc['PercN'] = str(round(float(ncount) / float(nuclen) * 100, 2)) + "%"
-        qc['PercACGT'] = str(round(float(dnacount) / float(nuclen) * 100, 2)) + "%"
+        if nuclen != 0:
+            qc['PercN'] = str(round(float(ncount) / float(nuclen) * 100, 2)) + "%"
+            qc['PercACGT'] = str(round(float(dnacount) / float(nuclen) * 100, 2)) + "%"
+        else:
+            qc['PercN'] = "100%"
+            qc['PercACGT'] = "0%"
 
 # Primer trimming
 filep = args.prefix + ".iVar.trim"
