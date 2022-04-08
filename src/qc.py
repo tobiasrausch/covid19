@@ -202,7 +202,10 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
     f_reader = csv.DictReader(open(filep), delimiter=",")
     for fields in f_reader:
         qc['Lineage'] = fields['lineage']
-        qc['PangolinStatus'] = fields['status']
+        if 'status' in fields.keys():
+            qc['PangolinStatus'] = fields['status']
+        else:
+            qc['PangolinStatus'] = fields['qc_status']
         qc['scorpio_call'] = fields['scorpio_call']
 
 # Nextclade
