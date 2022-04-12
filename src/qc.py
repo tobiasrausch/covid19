@@ -236,9 +236,9 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
 # Determine success/borderline/fail for this sample
 qc['QC'] = "pass"
 if (qc['NextcladeStatus'] is not None) and (qc['PangolinStatus'] is not None):
-    if (qc['PangolinStatus'] == 'passed_qc') and (qc['NextcladeStatus'] == 'good'):
+    if (qc['PangolinStatus'] == 'pass') and (qc['NextcladeStatus'] == 'good'):
         qc['QC'] = "pass"
-    elif (qc['PangolinStatus'] == 'passed_qc') and (qc['#ConsensusNs'] <= 5000):
+    elif (qc['PangolinStatus'] == 'pass') and (qc['#ConsensusNs'] <= 5000):
         qc['QC'] = "borderline"
     else:
         qc['QC'] = "fail"
@@ -288,7 +288,7 @@ if qc ['RKI'] == "pass":
         qc['Type'] = "B.1.617.2"
     elif qc['Lineage'] == "B.1.617.3":
         qc['Type'] = "B.1.617.3"
-    elif qc['Lineage'] == "None":
+    elif (qc['Lineage'] == "None") or (qc['Lineage'] == "Unassigned"):
         if qc['scorpio_call'].startswith("Omicron"):
             qc['Type'] = "B.1.1.529"
         else:
