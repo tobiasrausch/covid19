@@ -25,7 +25,7 @@ RUNVADR=0
 if [ -f ${FASTA} ]
 then
     source activate pangolin
-    pangolin -t ${THREADS} --outfile ${OUTP}.lineage.csv ${FASTA}
+    pangolin -t ${THREADS} --analysis-mode accurate --outfile ${OUTP}.lineage.csv ${FASTA}
     conda deactivate
 
     # Optional: nextclade (requires docker)
