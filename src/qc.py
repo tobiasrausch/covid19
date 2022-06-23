@@ -221,6 +221,10 @@ if (os.path.exists(filep)) and (os.path.isfile(filep)):
                 qc['Clade'] = p['clade']
             if 'qc' in p.keys():
                 qc['NextcladeStatus'] = p['qc']['overallStatus']
+            if qc['Lineage'] == "Unassigned":
+                if 'customNodeAttributes' in p.keys():
+                    if 'Nextclade_pango' in p['customNodeAttributes']:
+                        qc['Lineage'] = p['customNodeAttributes']['Nextclade_pango']
 
 # Vadr
 qc['VadrStatus'] = None
