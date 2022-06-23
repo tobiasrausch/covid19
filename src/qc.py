@@ -292,6 +292,8 @@ if qc ['RKI'] == "pass":
         qc['Type'] = "B.1.617.2"
     elif qc['Lineage'] == "B.1.617.3":
         qc['Type'] = "B.1.617.3"
+    elif (qc['Lineage'].startswith("X")) and (qc['Clade'] == "recombinant"):
+        qc['Type'] = "recombinant"
     elif (qc['Lineage'] == "None") or (qc['Lineage'] == "Unassigned"):
         if qc['scorpio_call'].startswith("Omicron"):
             qc['Type'] = "B.1.1.529"
