@@ -25,6 +25,6 @@ COLS=`cat ${OUTP}.depth | awk '{print NF;}' | head -n 1`
 COLS=`seq 3 3 ${COLS} | tr '\n' ',' | sed 's/,$//'`
 cut -f 1,2,${COLS} ${OUTP}.depth > ${OUTP}.depth.tmp
 mv ${OUTP}.depth.tmp ${OUTP}.depth
-Rscript ../scripts/cumcov.R ${OUTP}.depth
+Rscript ${BASEDIR}/../scripts/cumcov.R ${OUTP}.depth
 
 source deactivate
