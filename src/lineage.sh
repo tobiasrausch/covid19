@@ -42,7 +42,7 @@ then
 	    docker rm -vf nextclade
 	    sleep 1
 	fi
-	docker run -it --name nextclade --rm -u `id -u` --volume="/tmp/:/seq" nextstrain/nextclade nextclade run --input-fasta "/seq/${FASTA}" --input-dataset '/seq/sars-cov-2' --output-basename ${OUTP} --output-dir "/seq/" --output-json /seq/${OUTP}.json --output-tsv /seq/${OUTP}.tsv
+	docker run -it --name nextclade --rm -u `id -u` --volume="/tmp/:/seq" nextstrain/nextclade nextclade run --input-dataset '/seq/sars-cov-2' --output-basename ${OUTP} --output-all "/seq/" --output-json /seq/${OUTP}.json --output-tsv /seq/${OUTP}.tsv "/seq/${FASTA}"
 	cp /tmp/${OUTP}.json .
 	cp /tmp/${OUTP}.tsv .
 	rm /tmp/${OUTP}*
