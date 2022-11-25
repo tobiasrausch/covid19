@@ -294,6 +294,8 @@ if qc ['RKI'] == "pass":
         qc['Type'] = "B.1.1.529"
     elif qc['Lineage'].startswith("BY."):
         qc['Type'] = "B.1.1.529"
+    elif qc['Lineage'].startswith("BV."):
+        qc['Type'] = "B.1.1.529"
     elif qc['Lineage'].startswith("CE."):
         qc['Type'] = "B.1.1.529"
     elif qc['Lineage'].startswith("CB."):
