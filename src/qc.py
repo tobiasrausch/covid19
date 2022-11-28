@@ -270,37 +270,7 @@ if qc ['RKI'] == "pass":
         qc['Type'] = "B.1.351"
     elif qc['Lineage'] == "B.1.1.529":
         qc['Type'] = "B.1.1.529"
-    elif qc['Lineage'].startswith("BA."):
-        qc['Type'] = "B.1.1.529"
-    elif qc['Lineage'].startswith("BE."):
-        qc['Type'] = "B.1.1.529"
-    elif qc['Lineage'].startswith("BF."):
-        qc['Type'] = "B.1.1.529"
-    elif qc['Lineage'].startswith("BG."):
-        qc['Type'] = "B.1.1.529"
-    elif qc['Lineage'].startswith("BH."):
-        qc['Type'] = "B.1.1.529"
-    elif qc['Lineage'].startswith("BK."):
-        qc['Type'] = "B.1.1.529"
-    elif qc['Lineage'].startswith("BL."):
-        qc['Type'] = "B.1.1.529"
-    elif qc['Lineage'].startswith("BM."):
-        qc['Type'] = "B.1.1.529"
-    elif qc['Lineage'].startswith("BN."):
-        qc['Type'] = "B.1.1.529"
-    elif qc['Lineage'].startswith("BQ."):
-        qc['Type'] = "B.1.1.529"
-    elif qc['Lineage'].startswith("BS."):
-        qc['Type'] = "B.1.1.529"
-    elif qc['Lineage'].startswith("BY."):
-        qc['Type'] = "B.1.1.529"
-    elif qc['Lineage'].startswith("BV."):
-        qc['Type'] = "B.1.1.529"
-    elif qc['Lineage'].startswith("CE."):
-        qc['Type'] = "B.1.1.529"
-    elif qc['Lineage'].startswith("CB."):
-        qc['Type'] = "B.1.1.529"
-    elif qc['Lineage'].startswith("CC."):
+    elif qc['Lineage'].startswith(("BA.", "BE.", "BF.", "BG.", "BH.", "BK.", "BL.", "BM.", "BN.", "BQ.", "BS.", "BU.", "BY.", "BV.", "CE.", "CB.", "CC.", "CR.", "CM.", "XBB.")):
         qc['Type'] = "B.1.1.529"
     elif qc['Lineage'] == "A.27":
         qc['Type'] = "A.27"
