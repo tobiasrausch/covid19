@@ -270,7 +270,7 @@ if qc ['RKI'] == "pass":
         qc['Type'] = "B.1.351"
     elif qc['Lineage'] == "B.1.1.529":
         qc['Type'] = "B.1.1.529"
-    elif qc['Lineage'].startswith(("BA.", "BE.", "BF.", "BG.", "BH.", "BK.", "BL.", "BM.", "BN.", "BQ.", "BS.", "BT.", "BU.", "BY.", "BV.", "CE.", "CB.", "CC.", "CK.", "CL.", "CP.", "CR.", "CM.", "XBB.")):
+    elif qc['Lineage'].startswith(("BA.", "BE.", "BF.", "BG.", "BH.", "BK.", "BL.", "BM.", "BN.", "BQ.", "BS.", "BT.", "BU.", "BY.", "BV.", "CE.", "CB.", "CC.", "CK.", "CL.", "CN.", "CP.", "CR.", "CM.", "XBB.")):
         qc['Type'] = "B.1.1.529"
     elif qc['Lineage'] == "A.27":
         qc['Type'] = "A.27"
