@@ -4,6 +4,8 @@ SCRIPT=$(readlink -f "$0")
 BASEDIR=$(dirname "$SCRIPT")
 export PATH=${BASEDIR}/../conda/bin:${PATH}
 
+source activate covid19
+
 THREADS=12
 
 # Build standard DB, only required for ./src/contamination.sh
