@@ -30,7 +30,7 @@ samtools flagstat ${OUTP}.srt.bam > ${OUTP}.srt.bam.flagstat
 # Guess amplicon design
 BESTCOV=0
 cat ${BASEDIR}/../ref/*.primer.bed | cut -f 1-3 | sort | uniq -u > ${OUTP}.fetch
-for PRIN in nCoV-2019 neb_vss1a neb_vss2a
+for PRIN in neb_vss2a
 do
     if [ -f ${BASEDIR}/../ref/${PRIN}.primer.bed ]
     then
