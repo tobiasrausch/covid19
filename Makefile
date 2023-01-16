@@ -16,7 +16,7 @@ all: ${TARGETS}
 	export PATH=${PBASE}/conda/bin:${PATH} && source activate base && mamba create -y -c conda-forge -c bioconda -n covid19 samtools bcftools bedtools htslib bwa trim-galore fastqc delly kraken2 ivar alfred freebayes mafft iqtree cyvcf2 scikit-learn verifybamid wally && touch .tools
 
 .pangolin: .conda .mamba
-	export PATH=${PBASE}/conda/bin:${PATH} && wget https://github.com/cov-lineages/pangolin/archive/refs/tags/v4.1.3.tar.gz && tar -xzf v4.1.3.tar.gz && rm v4.1.3.tar.gz && mv pangolin-*/ pangolin && cd pangolin && conda env create -f environment.yml && source activate pangolin && pip install matplotlib scipy && pip install . && pangolin --update && pangolin -v && pangolin -pv && cd ../ && touch .pangolin
+	export PATH=${PBASE}/conda/bin:${PATH} && wget https://github.com/cov-lineages/pangolin/archive/refs/tags/v4.2.tar.gz && tar -xzf v4.2.tar.gz && rm v4.2.tar.gz && mv pangolin-*/ pangolin && cd pangolin && conda env create -f environment.yml && source activate pangolin && pip install matplotlib scipy && pip install . && pangolin --update && pangolin -v && pangolin -pv && cd ../ && touch .pangolin
 
 .check: .conda .mamba .tools
 	export PATH=${PBASE}/conda/bin:${PATH} && source activate covid19 && samtools --version && bcftools --version && bedtools --version && bgzip --version && tabix --version && trim_galore --version && delly --version && ivar version && touch .check
