@@ -270,7 +270,7 @@ if qc ['RKI'] == "pass":
         qc['Type'] = "B.1.351"
     elif qc['Lineage'] == "B.1.1.529":
         qc['Type'] = "B.1.1.529"
-    elif qc['Lineage'].startswith(("BA.", "BR.", "CA.", "CH.", "CJ.", "DA.", "DL.", "DJ.", "DG.", "BE.", "BF.", "BG.", "BH.", "BK.", "BL.", "BM.", "BN.", "BQ.", "BS.", "BT.", "BU.", "BY.", "BV.", "BW.", "CE.", "CB.", "CC.", "CK.", "CL.", "CN.", "CP.", "CR.", "CM.", "DN.", "DQ.", "BZ.", "DS.", "DU.", "DV.", "EA.", "EF.", "EL.", "EY.", "FL.", "FU.", "GB.", "XBB", "XBK", "EG.","EN.","EU.")):
+    elif qc['Lineage'].startswith(("BA.", "BR.", "CA.", "CH.", "CJ.", "DA.", "DL.", "DJ.", "DG.", "BE.", "BF.", "BG.", "BH.", "BK.", "BL.", "BM.", "BN.", "BQ.", "BS.", "BT.", "BU.", "BY.", "BV.", "BW.", "CE.", "CB.", "CC.", "CK.", "CL.", "CN.", "CP.", "CR.", "CM.", "DN.", "DQ.", "BZ.", "DS.", "DU.", "DV.", "EA.", "EF.", "EL.", "EY.", "FL.", "FU.", "GB.", "GJ.", "GN.", "HZ.", "XBB", "XBK", "EG.","EN.","EU.")):
         qc['Type'] = "B.1.1.529"
     elif qc['Lineage'] == "A.27":
         qc['Type'] = "A.27"
