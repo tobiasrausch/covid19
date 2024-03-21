@@ -68,9 +68,7 @@ The repository contains an example script using a [COG-UK](https://www.cogconsor
 
 ## Citation
 
-Evolution of SARS-CoV-2 in the Rhine-Neckar/Heidelberg Region 01/2021 - 07/2023
-Infect Genet Evol. 2024 Feb 23:119:105577.
-[DOI: 10.1016/j.meegid.2024.105577](https://doi.org/10.1016/j.meegid.2024.105577)
+Evolution of SARS-CoV-2 in the Rhine-Neckar/Heidelberg Region 01/2021 - 07/2023. Infect Genet Evol. 2024 Feb 23:119:105577. [DOI: 10.1016/j.meegid.2024.105577](https://doi.org/10.1016/j.meegid.2024.105577)
 
 ## Credits
 
