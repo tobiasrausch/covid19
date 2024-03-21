@@ -66,6 +66,12 @@ The repository contains an example script using a [COG-UK](https://www.cogconsor
 
 `cd example/ && ./expl.sh`
 
+## Citation
+
+Evolution of SARS-CoV-2 in the Rhine-Neckar/Heidelberg Region 01/2021 - 07/2023
+Infect Genet Evol. 2024 Feb 23:119:105577.
+[DOI: 10.1016/j.meegid.2024.105577](https://doi.org/10.1016/j.meegid.2024.105577)
+
 ## Credits
 
 Many thanks to the open-science of [COG-UK](https://www.cogconsortium.uk/), their data sets in [ENA](https://www.ebi.ac.uk/ena/browser/home) were very useful to develop the code. The workflow uses many tools distributed via [bioconda](https://bioconda.github.io/), please see the [Makefile](https://github.com/tobiasrausch/covid19/blob/main/Makefile) for all the dependencies and of course, thanks to all the developers.
