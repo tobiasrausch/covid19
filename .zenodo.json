@@ -1,0 +1,18 @@
+{
+  "creators": [
+    {
+      "orcid": "0000-0001-5773-5620",
+      "affiliation": "European Molecular Biology Laboratory (EMBL)",
+      "name": "Rausch, Tobias"
+    }
+  ],
+  "title": "SARS-CoV-2 data analysis pipeline.",
+  "upload_type": "software",
+  "access_right": "open",
+  "description": "<a href=\"https://github.com/tobiasrausch/covid19\">Scripts</a> of the SARS-CoV-2 data analysis pipeline.",
+  "keywords": [
+    "SARS-CoV-2",
+    "covid19",
+    "viral-sequencing"
+  ]
+}
