@@ -1,6 +1,6 @@
 .tools
 .check
-.conda
+.update
 .mamba
 .pangolin
 conda/
